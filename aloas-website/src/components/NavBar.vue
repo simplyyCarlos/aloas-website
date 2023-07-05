@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar">
     <div class="logo">
-      <img src="../assets/img/logo.png" alt="Logo" />
+      <img src="../assets/img/logo/logo.png" alt="Logo" />
     </div>
     <div class="nav-toggle" @click="toggleNav">
       <i class="fa fa-bars"></i>
