@@ -8,6 +8,10 @@ import HomePage from './pages/HomePage.vue'
 import AboutPage from './pages/AboutPage.vue'
 import EventsPage from './pages/EventsPage.vue'
 
+//Logo
+import '@fortawesome/fontawesome-free/css/all.css'
+
+
 const router = createRouter({
     history : createWebHistory(),
     routes : [
