@@ -1,12 +1,11 @@
-<script setup>
-
-</script>
 
 <template>
-  <main>
-    <h1>
-      Hello World
-    </h1>
-  </main>
+  <router-view></router-view>
 </template>
 
+<style>
+ *{
+  margin: 0;
+
+ }
+</style>
