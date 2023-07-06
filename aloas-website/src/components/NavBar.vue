@@ -97,7 +97,10 @@ export default {
 }
 
 .sign-in {
-  margin-left: auto; /* Push the element to the right */
+  position: fixed;
+  right: 20px;
+  top: 50px;
+  transform: translateY(-50%);
   padding: 20px;
 }
 
@@ -134,14 +137,24 @@ export default {
     align-items: center;
   }
 
+  .nav-open{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 100;
+  }
+
   .navbar .nav-item {
     margin: 10px 0;
     text-align: center;
   }
 
   .sign-in {
-    margin-top: -30px;
-    padding: 0;
+    position: fixed;
+    right: 0;
+    top: 82px;
+    transform: translateY(-50%);
+    padding: 20px;
   }
 }
 </style>
