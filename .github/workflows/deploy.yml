@@ -18,6 +18,7 @@ jobs:
         cd aloas-website
     - name: Install dependencies and build
       run: |
+        pwd
         npm install
         npm ci
         npm run build
