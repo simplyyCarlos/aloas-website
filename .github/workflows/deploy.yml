@@ -12,7 +12,10 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
+    
+    - name : Navigate to aloas-website folder 
+      run : | 
+        cd aloas-website
     - name: Install dependencies and build
       run: |
         npm install
@@ -24,7 +27,7 @@ jobs:
       with:
         host: ${{ secrets.VPS_HOST }}
         username: ${{ secrets.VPS_USERNAME }}
-        key: ${{ secrets.GITHUB_TOKEN}}
+        key: ${{ secrets.VPS_SSH_KEY}}
         script: |
           ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} 'mkdir -p /var/www/$VUE_JS_APP_NAME'
           scp -r dist/* ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}:/var/www/$VUE_JS_APP_NAME/
