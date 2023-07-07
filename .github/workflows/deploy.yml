@@ -19,6 +19,7 @@ jobs:
     - name: Install dependencies and build
       run: |
         pwd
+        echo "Current Location : ($pwd)"
         npm install
         npm ci
         npm run build
