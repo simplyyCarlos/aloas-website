@@ -19,7 +19,6 @@ jobs:
     - name: Install dependencies and build
       run: |
         cd aloas-website
-        pwd
         ls
         npm install
         npm ci
