@@ -18,7 +18,6 @@ jobs:
         cd aloas-website
     - name: Install dependencies and build
       run: |
-        ls
         cd aloas-website
         pwd
         ls
