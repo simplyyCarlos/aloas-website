@@ -70,6 +70,14 @@ const resetAutoScroll = () => {
       </div>
     </div>
   </div>
+  <div class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">Qui nous sommes ?</h1>
+      <p class="hero-paragraph">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet et tempora enim praesentium eaque, quisquam corrupti quam odio rem adipisci iusto exercitationem suscipit expedita placeat. Nulla quae labore totam eius ipsum neque? Ipsum molestiae iste ipsam aperiam voluptatem architecto recusandae, excepturi quaerat eaque quidem molestias obcaecati vitae laborum voluptatibus natus.
+      </p>
+    </div>
+  </div>
   <main class="container">
     <div class="recent-articles">
       <h2 class="section-title">Articles récents</h2>
@@ -102,37 +110,37 @@ const resetAutoScroll = () => {
           {
             id: 1,
             title: "Titre de l'article 1",
-            image: "chemin/vers/image1.jpg",
+            image: "src/assets/img/articles/articles.jpg",
             link: "/articles/1"
           },
           {
             id: 2,
             title: "Titre de l'article 2",
-            image: "chemin/vers/image2.jpg",
+            image: "src/assets/img/articles/articles.jpg",
             link: "/articles/2"
           },
           {
             id: 3,
             title: "Titre de l'article 3",
-            image: "chemin/vers/image3.jpg",
+            image: "src/assets/img/articles/articles.jpg",
             link: "/articles/3"
           },
           {
             id: 4,
             title: "Titre de l'article 4",
-            image: "chemin/vers/image4.jpg",
+            image: "src/assets/img/articles/articles.jpg",
             link: "/articles/4"
           },
           {
             id: 5,
             title: "Titre de l'article 5",
-            image: "chemin/vers/image5.jpg",
+            image: "src/assets/img/articles/articles.jpg",
             link: "/articles/5"
           },
           {
             id: 6,
             title: "Titre de l'article 6",
-            image: "chemin/vers/image6.jpg",
+            image: "src/assets/img/articles/articles.jpg",
             link: "/articles/6"
           }
         ],
@@ -159,6 +167,7 @@ const resetAutoScroll = () => {
 .carousel {
   position: relative;
   overflow: hidden;
+  height: 20rem;
 }
 
 .carousel-slides {
@@ -207,11 +216,33 @@ const resetAutoScroll = () => {
   font-size: 24px;
 }
 
+.hero-section {
+  background-color: #dddddd;
+  background-size: cover;
+  background-position: center;
+  padding: 50px 0;
+}
+
+.hero-content {
+  color: black;
+  padding: 20px;
+}
+
+.hero-title {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.hero-paragraph {
+  font-size: 16px;
+  margin-bottom: 0;
+}
+
 .container {
   display: grid;
   grid-template-columns: 2fr 1fr;
   grid-gap: 50px;
-  padding: 10px;
+  padding: 50px;
 }
 
 .recent-articles {
