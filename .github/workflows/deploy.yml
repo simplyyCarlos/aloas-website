@@ -27,10 +27,10 @@ jobs:
     - name: Deploy to VPS
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.VPS_HOST }}
-        username: ${{ secrets.VPS_USERNAME }}
+        host: 149.202.51.120
+        username: ubuntu
         key: ${{ secrets.VPS_SSH_KEY}}
         script: |
-          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} 'mkdir -p /var/www/$VUE_JS_APP_NAME'
-          scp -r dist/* ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}:/var/www/$VUE_JS_APP_NAME/
-          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} 'cd /var/www/$VUE_JS_APP_NAME && npm ci && pm2 restart all'
+          ssh ubuntu@149.202.51.120 'mkdir -p /var/www/$VUE_JS_APP_NAME'
+          scp -r dist/* ubuntu@149.202.51.120:/var/www/$VUE_JS_APP_NAME/
+          ssh ubuntu@149.202.51.120 'cd /var/www/$VUE_JS_APP_NAME && npm ci && pm2 restart all'
