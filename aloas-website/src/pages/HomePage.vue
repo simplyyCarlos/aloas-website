@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue';
 import Footer from '../components/Footer.vue';
 import NavBar from '../components/NavBar.vue';
 
+import LoginPopup from '../components/LoginPopup.vue';
 const slides = [
   'src/assets/img/carousel/image1.png',
   'src/assets/img/carousel/image2.jpg',
@@ -46,7 +47,6 @@ const startAutoScroll = () => {
     intervalId = setInterval(nextSlide, intervalDuration);
   }
 };
-
 const resetAutoScroll = () => {
   clearInterval(intervalId);
   startAutoScroll();
@@ -54,7 +54,8 @@ const resetAutoScroll = () => {
 </script>
 
 <template>
-  <NavBar />
+  <NavBar :showLoginPopup="showLoginPopup" @toggle-login-popup="toggleLoginPopup" />
+  <LoginPopup :showLoginPopup="showLoginPopup" @toggle-login-popup="toggleLoginPopup" v-if="showLoginPopup" />
   <div class="carousel">
     <div class="carousel-slides" :style="{ transform: `translateX(-${slideIndex * slideWidth}px)` }">
       <div class="carousel-slide" v-for="(slide, index) in slides" :key="index">
@@ -105,62 +106,69 @@ const resetAutoScroll = () => {
 <script>
   export default {
     data() {
-      return {
-        articles: [
-          {
-            id: 1,
-            title: "Titre de l'article 1",
-            image: "src/assets/img/articles/articles.jpg",
-            link: "/articles/1"
-          },
-          {
-            id: 2,
-            title: "Titre de l'article 2",
-            image: "src/assets/img/articles/articles.jpg",
-            link: "/articles/2"
-          },
-          {
-            id: 3,
-            title: "Titre de l'article 3",
-            image: "src/assets/img/articles/articles.jpg",
-            link: "/articles/3"
-          },
-          {
-            id: 4,
-            title: "Titre de l'article 4",
-            image: "src/assets/img/articles/articles.jpg",
-            link: "/articles/4"
-          },
-          {
-            id: 5,
-            title: "Titre de l'article 5",
-            image: "src/assets/img/articles/articles.jpg",
-            link: "/articles/5"
-          },
-          {
-            id: 6,
-            title: "Titre de l'article 6",
-            image: "src/assets/img/articles/articles.jpg",
-            link: "/articles/6"
-          }
-        ],
-        events: [
-          {
-            id: 1,
-            title: "Événement 1"
-          },
-          {
-            id: 2,
-            title: "Événement 2"
-          },
-          {
-            id: 3,
-            title: "Événement 3"
-          }
-        ]
-      };
+        return {
+          showLoginPopup : false,
+            articles: [
+                {
+                    id: 1,
+                    title: "Titre de l'article 1",
+                    image: "src/assets/img/articles/articles.jpg",
+                    link: "/articles/1"
+                },
+                {
+                    id: 2,
+                    title: "Titre de l'article 2",
+                    image: "src/assets/img/articles/articles.jpg",
+                    link: "/articles/2"
+                },
+                {
+                    id: 3,
+                    title: "Titre de l'article 3",
+                    image: "src/assets/img/articles/articles.jpg",
+                    link: "/articles/3"
+                },
+                {
+                    id: 4,
+                    title: "Titre de l'article 4",
+                    image: "src/assets/img/articles/articles.jpg",
+                    link: "/articles/4"
+                },
+                {
+                    id: 5,
+                    title: "Titre de l'article 5",
+                    image: "src/assets/img/articles/articles.jpg",
+                    link: "/articles/5"
+                },
+                {
+                    id: 6,
+                    title: "Titre de l'article 6",
+                    image: "src/assets/img/articles/articles.jpg",
+                    link: "/articles/6"
+                }
+            ],
+            events: [
+                {
+                    id: 1,
+                    title: "Événement 1"
+                },
+                {
+                    id: 2,
+                    title: "Événement 2"
+                },
+                {
+                    id: 3,
+                    title: "Événement 3"
+                }
+            ]
+        };
+    },
+    components: { LoginPopup },
+    methods : {
+      toggleLoginPopup () {
+        this.showLoginPopup =!this.showLoginPopup;
+      }
     }
-  };
+};
 </script>
 
 <style scoped>

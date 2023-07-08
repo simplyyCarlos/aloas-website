@@ -16,7 +16,7 @@
       <li class="nav-item">Nous contacter</li>
     </ul>
     <div class="sign-in">
-      <i :class="isLoggedIn ? 'fa fa-sign-in' : 'fa fa-sign-out'" @click="toggleLogin"></i>
+      <i :class="isLoggedIn ? 'fa fa-sign-in' : 'fa fa-sign-out'" @click="$emit('toggle-login-popup')"></i>
     </div>
   </nav>
 </template>
@@ -35,6 +35,7 @@ export default {
     },
     toggleLogin() {
       this.isLoggedIn = !this.isLoggedIn;
+     
     }
   }
 };
@@ -50,7 +51,8 @@ export default {
 }
 
 .logo img {
-  height: 50px; /* Adjust the height as needed */
+  height: 70px; /* Adjust the height as needed */
+  width: 170px;
   margin-right: 10px;
 }
 
@@ -118,6 +120,18 @@ export default {
   text-decoration: none;
 }
 
+@media (max-width: 1050px) {
+    .navbar .nav-item[data-v-c3ceb15a] {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 873px) {
+    .navbar .nav-item[data-v-c3ceb15a] {
+        font-size: 0.7rem;
+    }
+}
+
 @media (max-width: 768px) {
   /* Styles for screens smaller than 768px */
   .navbar {
@@ -125,10 +139,18 @@ export default {
     padding: 10px;
   }
 
+
+  .logo img{
+    height: 70px ;
+    width: 200px;
+  }
   .nav-toggle {
+    position: fixed;
     display: flex;
     margin-right: auto;
-    padding: 10px;
+    left : 0;
+    top  : 20px;
+    padding: 20px;
   }
 
   .navbar ul {
@@ -160,7 +182,7 @@ export default {
   .sign-in {
     position: fixed;
     right: 0;
-    top: 82px;
+    top: 50px;
     transform: translateY(-50%);
     padding: 20px;
   }

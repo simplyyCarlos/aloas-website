@@ -1,17 +1,24 @@
 <template>
-    <div class="login-popup" v-if="showPopup">
-        <h2>Connexion</h2>
-        <div class="textbox">
-            <font-awesome-icon :icon="['fas', 'user']" />
-            <input type="text" placeholder="Username" v-model="username" required>
-        </div>
+    <div>
 
-        <div class="textbox">
-            <font-awesome-icon :icon="['fas', 'lock']" />
-            <input type="password" placeholder="Password" v-model="password" required>
+        <div class="blur-overlay" v-if="showPopup"></div>
+        <div class="login-popup" v-if="showPopup">
+            <h2>Connexion</h2>
+            <div class="close-popup" @click="$emit('toggle-login-popup')">
+                <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
+            </div>
+            <div class="textbox">
+                <font-awesome-icon :icon="['fas', 'user']" />
+                <input type="text" placeholder="Username" v-model="username" required>
+            </div>
+
+            <div class="textbox">
+                <font-awesome-icon :icon="['fas', 'lock']" />
+                <input type="password" placeholder="Password" v-model="password" required>
+            </div>
+            
+            <button class="btn" type="submit"> Sign In</button>
         </div>
-        
-        <button class="btn" type="submit"> Sign In</button>
     </div>
 </template>
 
@@ -42,17 +49,29 @@ export default {
         font-family: sans-serif;
         
     }
-    .login-popup{
-        border: 2px solid rgb(49, 49, 49,0.25);
-        padding : 1em;
-        border-radius: 5%;
-        width: 280px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%,-50%);
-        color: black;
+
+    .blur-overlay{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0);
+        backdrop-filter: blur(5px);
+        z-index: 999;
     }
+    .login-popup{
+       position: fixed;
+       top: 50%;
+       left: 50%;
+       width: 20%;
+       transform: translate(-50%,-50%);
+       z-index: 1000;
+       background-color: white;
+       padding: 1em;
+       border-radius: 5px;
+       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }   
     
     .login-popup h2{
         float: left;
@@ -87,6 +106,19 @@ export default {
         margin:  0 10px;
     }
 
+    .close-popup {
+        cursor:pointer;
+        position: fixed;
+        padding: 1em;
+        right: 0;
+        top: 0;
+        transition: transform 0.3s, box-shadow 0.3s;
+
+    }
+    .close-popup:hover{
+        transform: scale(1.1);
+        box-shadow: 0 2px 8px rgba (0,0,0,0.3);
+    }
     .btn {
         width: 100%;
         background: none;
