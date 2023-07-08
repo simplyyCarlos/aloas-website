@@ -6,6 +6,9 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faUser, faLock } from '@fortawesome/free-solid-svg-icons'
 import routes from './router'
+import PrimeVue from 'primevue/config';
+import "primevue/resources/themes/lara-light-indigo/theme.css";     
+import "primevue/resources/primevue.min.css";
 
 //Logo
 import '@fortawesome/fontawesome-free/css/all.css'
@@ -22,6 +25,7 @@ createApp(App)
 .use(router)
 .component('font-awesome-icon',FontAwesomeIcon)
 .mount('#app')
+.use(PrimeVue)
 
 
 

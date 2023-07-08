@@ -1,13 +1,16 @@
 <template>
   <nav class="navbar">
     <div class="logo">
-      <img src="../assets/img/logo/logo.png" alt="Logo" />
+      <router-link to="/" class="router-link">
+        <img src="../assets/img/logo/logo.png" alt="Logo" />
+      </router-link>
     </div>
     <div class="nav-toggle" @click="toggleNav">
       <i class="fa fa-bars"></i>
     </div>
     <ul :class="{'nav-open': isNavOpen}">
-      <li class="nav-item">Accueil</li>
+      <li class="nav-item"><router-link to="/" class="router-link">Accueil</router-link></li>
+      <li class="nav-item"><router-link to="/articles" class="router-link">Articles</router-link></li>
       <li class="nav-item">Événements</li>
       <li class="nav-item">À propos</li>
       <li class="nav-item">Nous contacter</li>
@@ -108,6 +111,11 @@ export default {
   color: white;
   font-size: 1.75rem;
   cursor: pointer;
+}
+
+.router-link {
+  color: white;
+  text-decoration: none;
 }
 
 @media (max-width: 768px) {
