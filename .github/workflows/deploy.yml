@@ -1,4 +1,4 @@
-name: Deploy to VPS
+name: Deploy to Ubuntu VPS
 
 on:
   push:
@@ -10,26 +10,42 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    
-    - name : Navigate to aloas-website folder 
-      run : | 
-        cd aloas-website
-    - name: Install dependencies and build
-      run: |
-        cd aloas-website
-        npm install
-        npm ci
-        npm run build
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Deploy to VPS
-      uses: appleboy/ssh-action@master
-      with:
-        host: 149.202.51.120
-        username: ubuntu
-        key: ${{ secrets.VPS_SSH_KEY}}
-        script: |
-          ssh ubuntu@149.202.51.120 'mkdir -p /var/www/$VUE_JS_APP_NAME'
-          scp -r dist/* ubuntu@149.202.51.120:/var/www/$VUE_JS_APP_NAME/
-          ssh ubuntu@149.202.51.120 'cd /var/www/$VUE_JS_APP_NAME && npm ci && pm2 restart all'
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: |
+          cd aloas-website
+          npm ci
+
+      - name: Build
+        run: |
+          cd aloas-website
+          npm run build
+
+      - name: Copy files to VPS
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: aloas-website/dist/
+          target: /var/www/html
+
+      - name: SSH into VPS and restart application with PM2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd /var/www/html
+            npm install pm2 -g
+            pm2 delete my-app || true
+            pm2 start npm --name "my-app" -- start
+
