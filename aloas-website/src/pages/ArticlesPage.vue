@@ -8,6 +8,7 @@
         <option value="">Toutes les catégories</option>
         <option v-for="category in categories" :value="category">{{ category }}</option>
       </select>
+      <AddArticlePopup v-if="isAddArticleModalOpen" @close="closeAddArticleModal" />
     </div>
     <div class="article-list">
       <div v-for="article in filteredArticles" :key="article.id" class="article-item">
@@ -23,10 +24,12 @@
 
 <script>
 import NavBar from '../components/NavBar.vue';
+import AddArticlePopup from '../components/AddArticlePopup.vue';
 
 export default {
   data() {
     return {
+      isAddArticleModalOpen: true,
       searchQuery: '',
       selectedCategory: '',
       articles: [
@@ -79,8 +82,17 @@ export default {
       );
     }
   },
+  methods: {
+    showAddArticleModal() {
+      this.isAddArticleModalOpen = true;
+    },
+    closeAddArticleModal() {
+      this.isAddArticleModalOpen = false;
+    }
+  },
   components: {
-    NavBar
+    NavBar,
+    AddArticlePopup
   }
 };
 </script>
