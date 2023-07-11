@@ -11,6 +11,7 @@
     <ul :class="{'nav-open': isNavOpen}">
       <li class="nav-item"><router-link to="/" class="router-link">Accueil</router-link></li>
       <li class="nav-item"><router-link to="/articles" class="router-link">Articles</router-link></li>
+      <li class="nav-item"><router-link to="/activities" class="router-link">Activités</router-link></li>
       <li class="nav-item">Événements</li>
       <li class="nav-item">À propos</li>
       <li class="nav-item">Nous contacter</li>
