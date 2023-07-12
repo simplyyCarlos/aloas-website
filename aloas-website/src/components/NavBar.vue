@@ -102,11 +102,7 @@ export default {
 }
 
 .sign-in {
-  position: fixed;
-  right: 20px;
-  top: 50px;
-  transform: translateY(-50%);
-  padding: 20px;
+  margin-left: auto;
 }
 
 .sign-in i {
