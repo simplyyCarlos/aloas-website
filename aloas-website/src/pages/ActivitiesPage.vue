@@ -20,7 +20,7 @@
     <ul>
       <li v-for="activity in activities" :key="activity.id">
         <h2>{{ activity.title }}</h2>
-        <p>{{ activity.description }}</p>
+        <p class="activity-description">{{ activity.description }}</p>
       </li>
     </ul>
   </div>
@@ -188,8 +188,11 @@ h2 {
 }
 
 p {
-  font-size: 14px;
+  font-size: 16px;
   margin-bottom: 0;
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 10px;
 }
 </style>
   
