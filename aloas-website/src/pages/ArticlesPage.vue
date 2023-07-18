@@ -8,7 +8,7 @@
         <option value="">Toutes les catégories</option>
         <option v-for="category in categories" :value="category">{{ category }}</option>
       </select>
-      <AddArticlePopup v-if="isAddArticleModalOpen" @close="closeAddArticleModal" />
+      <AddArticlePopup v-if="isAddArticleModalOpen" @close="closeAddArticleModal" @articleAdded="addArticle" />
     </div>
     <div class="article-list">
       <div v-for="article in filteredArticles" :key="article.id" class="article-item">
@@ -88,6 +88,12 @@ export default {
     },
     closeAddArticleModal() {
       this.isAddArticleModalOpen = false;
+    },
+    addArticle(newArticle) {
+      this.articles.push({
+        id: this.articles.length + 1,
+        ...newArticle
+      });
     }
   },
   components: {

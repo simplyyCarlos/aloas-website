@@ -49,6 +49,7 @@
         // Perform the logic to add the article to your data collection
         // You can access the values from `this.newArticle` object
         // After adding the article, you can close the modal and reset the form
+        this.$emit('articleAdded', this.newArticle);
         this.closeAddArticleModal();
       },
       resetNewArticleForm() {
