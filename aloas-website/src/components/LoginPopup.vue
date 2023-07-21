@@ -3,6 +3,7 @@
 
         <div class="blur-overlay" v-if="showPopup"></div>
         <div class="login-popup" v-if="showPopup">
+            <form @submit.prevent="submitForm">
             <h2>Connexion</h2>
             <div class="close-popup" @click="$emit('toggle-login-popup')">
                 <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
@@ -18,6 +19,7 @@
             </div>
             
             <button class="btn" type="submit"> Sign In</button>
+            </form>
         </div>
     </div>
 </template>
@@ -32,8 +34,17 @@ export default {
         }
     },
     methods : {
-        submitForm(){
-            this.$emit('login', {username : this.username, password : this.password})
+        async submitForm(){
+            const response = await this.$http.post('api/login', {
+                username : this.username,
+                password: this.password
+            })
+
+            if(response.data.success){
+                this.$router.push('/events')
+            }else{
+                alert('Invalid username or password')
+            }
         }
     }
 }
@@ -64,7 +75,8 @@ export default {
        position: fixed;
        top: 50%;
        left: 50%;
-       width: 20%;
+       
+       width: 300px;
        transform: translate(-50%,-50%);
        z-index: 1000;
        background-color: white;

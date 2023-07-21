@@ -117,13 +117,19 @@ export default {
   text-decoration: none;
 }
 
-@media (max-width: 1050px) {
+@media (max-width: 1205px) {
+    .navbar .nav-item[data-v-c3ceb15a] {
+        font-size: 1.15rem;
+    }
+}
+
+@media (max-width: 1064px) {
     .navbar .nav-item[data-v-c3ceb15a] {
         font-size: 1rem;
     }
 }
 
-@media (max-width: 873px) {
+@media (max-width: 999px) {
     .navbar .nav-item[data-v-c3ceb15a] {
         font-size: 0.7rem;
     }

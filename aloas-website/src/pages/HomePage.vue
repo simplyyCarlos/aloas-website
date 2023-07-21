@@ -71,14 +71,6 @@ const resetAutoScroll = () => {
       </div>
     </div>
   </div>
-  <div class="hero-section">
-    <div class="hero-content">
-      <h1 class="hero-title">Qui nous sommes ?</h1>
-      <p class="hero-paragraph">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet et tempora enim praesentium eaque, quisquam corrupti quam odio rem adipisci iusto exercitationem suscipit expedita placeat. Nulla quae labore totam eius ipsum neque? Ipsum molestiae iste ipsam aperiam voluptatem architecto recusandae, excepturi quaerat eaque quidem molestias obcaecati vitae laborum voluptatibus natus.
-      </p>
-    </div>
-  </div>
   <main class="container">
     <div class="recent-articles">
       <h2 class="section-title">Articles récents</h2>
@@ -175,7 +167,8 @@ const resetAutoScroll = () => {
 .carousel {
   position: relative;
   overflow: hidden;
-  height: 20rem;
+  height: 30rem;
+  z-index: 0;
 }
 
 .carousel-slides {
@@ -190,7 +183,7 @@ const resetAutoScroll = () => {
 
 .slide-image {
   width: 100%;
-  height: auto;
+  height: 100%;
 }
 
 .carousel-controls {
@@ -203,7 +196,7 @@ const resetAutoScroll = () => {
 .control-button {
   display: inline-block;
   position: absolute;
-  top: 50%;
+  top: calc(50% - 20px);
   transform: translateY(-50%);
   padding: 10px;
   background-color: rgba(0, 0, 0, 0.5);
@@ -247,18 +240,20 @@ const resetAutoScroll = () => {
 }
 
 .container {
+  position: relative;
   display: grid;
   grid-template-columns: 2fr 1fr;
   grid-gap: 50px;
-  padding: 50px;
+  margin-top: -50px;
+  z-index: 2;
 }
 
 .recent-articles {
   margin-bottom: 20px;
   margin-left: 25%;
-  background-color: #a7a7a7;
-  border-radius: 5%;
-  box-shadow: 5px 5px 5px 5px rgb(211, 211, 211);
+  background-color: #ffffff;
+  border-radius: 1%;
+  box-shadow: 0.5px 0.5px 0.5px 1px rgba(0, 0, 0, 0.315);
 }
 
 .section-title {
@@ -299,11 +294,11 @@ const resetAutoScroll = () => {
 }
 
 .recent-events {
-  background-color: #f0f0f0;
+  background-color: #ffffff;
   padding: 10px;
-  width: 50%;
-  border-radius: 5%;
-  box-shadow: 5px 5px 5px 5px rgb(211, 211, 211);
+  width: 70%;
+  border-radius: 2%;
+  box-shadow: 0.5px 0.5px 0.5px 1px rgb(0, 0, 0,0.315);
 }
 
 .event-list {
@@ -314,6 +309,12 @@ const resetAutoScroll = () => {
 
 .event-item {
   margin-bottom: 10px;
+}
+
+@media (max-width: 1050px) {
+    .carousel {
+      height: 18rem;
+    }
 }
 
 @media (max-width: 768px) {
