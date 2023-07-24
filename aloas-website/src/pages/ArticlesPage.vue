@@ -32,44 +32,7 @@ export default {
       isAddArticleModalOpen: true,
       searchQuery: '',
       selectedCategory: '',
-      articles: [
-        {
-          id: 1,
-          title: "Article 1",
-          category: "Catégorie 1",
-          content: "Contenu de l'article 1"
-        },
-        {
-          id: 2,
-          title: "Article 2",
-          category: "Catégorie 2",
-          content: "Contenu de l'article 2"
-        },
-        {
-          id: 3,
-          title: "Article 3",
-          category: "Catégorie 1",
-          content: "Contenu de l'article 3"
-        },
-        {
-          id: 4,
-          title: "Article 1",
-          category: "Catégorie 1",
-          content: "Contenu de l'article 1"
-        },
-        {
-          id: 5,
-          title: "Article 2",
-          category: "Catégorie 2",
-          content: "Contenu de l'article 2"
-        },
-        {
-          id: 6,
-          title: "Article 3",
-          category: "Catégorie 1",
-          content: "Contenu de l'article 3"
-        },
-      ],
+      articles: [],
       categories: ['Catégorie 1', 'Catégorie 2', 'Catégorie 3'] // Replace with your actual categories
     };
   },
@@ -83,6 +46,13 @@ export default {
     }
   },
   methods: {
+    getAllArticles(){
+      this.axios.get('../ajax/articlesAjax.php').then((response) => {
+        this.articles = response.data;
+      }).catch((error) => {
+        console.log(error);
+      });
+    },
     showAddArticleModal() {
       this.isAddArticleModalOpen = true;
     },
