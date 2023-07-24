@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     getAllArticles(){
-      this.axios.get('../ajax/articlesAjax.php').then((response) => {
+      this.axios.get('../api/articlesApi.php').then((response) => {
         this.articles = response.data;
       }).catch((error) => {
         console.log(error);
@@ -69,6 +69,9 @@ export default {
   components: {
     NavBar,
     AddArticlePopup
+  },
+  created() {
+    this.getAllArticles();
   }
 };
 </script>
