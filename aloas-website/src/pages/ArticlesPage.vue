@@ -14,9 +14,9 @@
       <div v-for="article in filteredArticles" :key="article.id" class="article-item">
         <img src="../assets/img/articles/articles.jpg" alt="Article" class="article-image" />
         <!-- Replace with your actual article image -->
-        <h2 class="article-title">{{ article.title }}</h2>
-        <p class="article-category">Catégorie: {{ article.category }}</p>
-        <p class="article-content">{{ article.content }}</p>
+        <h2 class="article-title">{{ article.titre }}</h2>
+        <p class="article-category">Catégorie: {{ article.type_article }}</p>
+        <p class="article-content">{{ article.auteur }}</p>
       </div>
     </div>
   </div>
@@ -25,6 +25,7 @@
 <script>
 import NavBar from '../components/NavBar.vue';
 import AddArticlePopup from '../components/AddArticlePopup.vue';
+import axios from 'axios';
 
 export default {
   data() {
@@ -40,15 +41,17 @@ export default {
     filteredArticles() {
       return this.articles.filter(
         (article) =>
-          article.title.toLowerCase().includes(this.searchQuery.toLowerCase()) &&
-          (this.selectedCategory === '' || article.category === this.selectedCategory)
+          article.titre.toLowerCase().includes(this.searchQuery.toLowerCase()) &&
+          (this.selectedCategory === '' || article.type_article === this.selectedCategory)
       );
     }
   },
   methods: {
     getAllArticles(){
-      this.axios.get('../api/articlesApi.php').then((response) => {
+      axios.get('http://localhost:8080/src/api/articlesApi.php').then((response) => {
         this.articles = response.data;
+        console.log(this.articles);
+        console.log(response.data);
       }).catch((error) => {
         console.log(error);
       });
