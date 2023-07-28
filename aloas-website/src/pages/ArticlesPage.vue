@@ -3,11 +3,8 @@
   <div class="article-page">
     <h1 class="page-title">Articles</h1>
     <div class="filters">
-      <input type="text" v-model="searchQuery" placeholder="Rechercher un article" class="search-input" />
-      <select v-model="selectedCategory" class="category-select">
-        <option value="">Toutes les catégories</option>
-        <option v-for="category in categories" :value="category">{{ category }}</option>
-      </select>
+      <InputText id="title" v-model="searchQuery" placeholder="Rechercher un article" class="search-input" required />
+      <Dropdown :options="categories" v-model="selectedCategory" optionLabel="libelle" />
       <AddArticlePopup v-if="isAddArticleModalOpen" @close="closeAddArticleModal" @articleAdded="addArticle" />
     </div>
     <div class="article-list">
@@ -15,8 +12,8 @@
         <img src="../assets/img/articles/articles.jpg" alt="Article" class="article-image" />
         <!-- Replace with your actual article image -->
         <h2 class="article-title">{{ article.titre }}</h2>
-        <p class="article-category">Catégorie: {{ article.type_article }}</p>
-        <p class="article-content">{{ article.auteur }}</p>
+        <p class="article-category">Catégorie: {{ article.libelle }}</p>
+        <p class="article-content">Auteur : {{ article.nom }} {{ article.prenom }}</p>
       </div>
     </div>
   </div>
@@ -32,17 +29,18 @@ export default {
     return {
       isAddArticleModalOpen: true,
       searchQuery: '',
-      selectedCategory: '',
+      selectedCategory: { libelle: 'Toutes les categories' },
       articles: [],
-      categories: ['Catégorie 1', 'Catégorie 2', 'Catégorie 3'] // Replace with your actual categories
+      categories: [], // Replace with your actual categories
     };
   },
   computed: {
     filteredArticles() {
+      console.log(this.selectedCategory);
       return this.articles.filter(
         (article) =>
           article.titre.toLowerCase().includes(this.searchQuery.toLowerCase()) &&
-          (this.selectedCategory === '' || article.type_article === this.selectedCategory)
+          (this.selectedCategory.libelle === 'Toutes les categories' || article.libelle === this.selectedCategory.libelle)
       );
     }
   },
@@ -56,24 +54,33 @@ export default {
         console.log(error);
       });
     },
+    getAllCategories(){
+      axios.get('http://localhost:8080/src/api/categoriesApi.php').then((response) => {
+        this.categories = response.data;
+        this.categories.unshift({libelle: 'Toutes les categories'});
+        console.log(this.categories);
+        console.log(response.data);
+      }).catch((error) => {
+        console.log(error);
+      });
+    },
     showAddArticleModal() {
       this.isAddArticleModalOpen = true;
     },
     closeAddArticleModal() {
       this.isAddArticleModalOpen = false;
     },
-    addArticle(newArticle) {
-      this.articles.push({
-        id: this.articles.length + 1,
-        ...newArticle
-      });
-    }
+    articleAdded(newArticle) {
+      this.articles.push(newArticle);
+      this.closeAddArticleModal();
+    },
   },
   components: {
     NavBar,
     AddArticlePopup
   },
   created() {
+    this.getAllCategories();
     this.getAllArticles();
   }
 };

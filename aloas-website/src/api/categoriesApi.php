@@ -4,10 +4,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
 header("Access-Control-Allow-Methods: *");
 session_start();
-$sql = "SELECT articles.*, types_articles.libelle, utilisateurs.nom, utilisateurs.prenom
-        FROM articles
-        LEFT JOIN types_articles ON articles.type_article = types_articles.id
-        LEFT JOIN utilisateurs ON articles.auteur = utilisateurs.id";
+$sql = "SELECT * FROM types_articles;";
 
 $result = mysqli_query($con, $sql);
 
