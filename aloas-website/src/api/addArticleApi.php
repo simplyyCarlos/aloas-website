@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $content = mysqli_real_escape_string($con, $data["content"]);
     $date = date("Y-m-d");
 
-    $sql = "INSERT INTO articles (titre, category, content) VALUES ('$title', '$category', '$content')";
+    $sql = "INSERT INTO articles (titre, auteur, date_de_parution, type_article, contenu) VALUES ('$title', 1 , '$date', 1 , '$content')";
 
     if (mysqli_query($con, $sql)) {
         // Return a success message (optional)

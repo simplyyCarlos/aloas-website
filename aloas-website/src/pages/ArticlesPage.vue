@@ -5,7 +5,7 @@
     <div class="filters">
       <InputText id="title" v-model="searchQuery" placeholder="Rechercher un article" class="search-input" required />
       <Dropdown :options="categories" v-model="selectedCategory" optionLabel="libelle" />
-      <AddArticlePopup v-if="isAddArticleModalOpen" @close="closeAddArticleModal" @articleAdded="addArticle" />
+      <AddArticlePopup v-if="isAddArticleModalOpen" @close="closeAddArticleModal" @articleAdded="articleAdded" />
     </div>
     <div class="article-list">
       <div v-for="article in filteredArticles" :key="article.id" class="article-item">
@@ -17,11 +17,13 @@
       </div>
     </div>
   </div>
+  <Footer />
 </template>
 
 <script>
 import NavBar from '../components/NavBar.vue';
 import AddArticlePopup from '../components/AddArticlePopup.vue';
+import Footer from '../components/Footer.vue';
 import axios from 'axios';
 
 export default {
@@ -36,7 +38,7 @@ export default {
   },
   computed: {
     filteredArticles() {
-      console.log(this.selectedCategory);
+      console.log(this.articles);
       return this.articles.filter(
         (article) =>
           article.titre.toLowerCase().includes(this.searchQuery.toLowerCase()) &&
@@ -45,11 +47,9 @@ export default {
     }
   },
   methods: {
-    getAllArticles(){
+    async getAllArticles(){
       axios.get('http://localhost:8080/src/api/articlesApi.php').then((response) => {
         this.articles = response.data;
-        console.log(this.articles);
-        console.log(response.data);
       }).catch((error) => {
         console.log(error);
       });
@@ -58,8 +58,6 @@ export default {
       axios.get('http://localhost:8080/src/api/categoriesApi.php').then((response) => {
         this.categories = response.data;
         this.categories.unshift({libelle: 'Toutes les categories'});
-        console.log(this.categories);
-        console.log(response.data);
       }).catch((error) => {
         console.log(error);
       });
@@ -70,14 +68,15 @@ export default {
     closeAddArticleModal() {
       this.isAddArticleModalOpen = false;
     },
-    articleAdded(newArticle) {
-      this.articles.push(newArticle);
-      this.closeAddArticleModal();
+    async articleAdded() {
+      await this.getAllArticles();
+      this.showAddArticleModal();
     },
   },
   components: {
     NavBar,
-    AddArticlePopup
+    AddArticlePopup,
+    Footer
   },
   created() {
     this.getAllCategories();

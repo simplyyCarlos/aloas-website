@@ -46,8 +46,6 @@ export default {
     getAllCategories(){
       axios.get('http://localhost:8080/src/api/categoriesApi.php').then((response) => {
         this.categories = response.data;
-        console.log(this.categories);
-        console.log(response.data);
       }).catch((error) => {
         console.log(error);
       });
@@ -70,10 +68,11 @@ export default {
           console.log("Article added successfully!");
 
           // Emit an event to notify parent components that an article was added
-          this.$emit("articleAdded", this.newArticle);
+          this.$emit("articleAdded");
 
-          // Close the modal and reset the form
+          // Reset the new article form
           this.closeAddArticleModal();
+
         })
         .catch((error) => {
           console.error("Error adding article:", error);
