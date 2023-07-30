@@ -1,5 +1,6 @@
 <template>
-  <NavBar />
+  <NavBar :showLoginPopup="showLoginPopup" @toggle-login-popup="toggleLoginPopup" />
+  <LoginPopup :showLoginPopup="showLoginPopup" @toggle-login-popup="toggleLoginPopup" v-if="showLoginPopup" />
   <div class="article-page">
     <h1 class="page-title">Articles</h1>
     <div class="filters">
@@ -24,11 +25,13 @@
 import NavBar from '../components/NavBar.vue';
 import AddArticlePopup from '../components/AddArticlePopup.vue';
 import Footer from '../components/Footer.vue';
+import LoginPopup from '../components/LoginPopup.vue';
 import axios from 'axios';
 
 export default {
   data() {
     return {
+      showLoginPopup : false,
       isAddArticleModalOpen: true,
       searchQuery: '',
       selectedCategory: { libelle: 'Toutes les categories' },
@@ -72,11 +75,15 @@ export default {
       await this.getAllArticles();
       this.showAddArticleModal();
     },
+    toggleLoginPopup () {
+        this.showLoginPopup =!this.showLoginPopup;
+    },
   },
   components: {
     NavBar,
     AddArticlePopup,
-    Footer
+    Footer,
+    LoginPopup,
   },
   created() {
     this.getAllCategories();

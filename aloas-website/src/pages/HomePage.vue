@@ -2,8 +2,8 @@
 import { ref, onMounted } from 'vue';
 import Footer from '../components/Footer.vue';
 import NavBar from '../components/NavBar.vue';
-
 import LoginPopup from '../components/LoginPopup.vue';
+
 const slides = [
   'src/assets/img/carousel/image1.png',
   'src/assets/img/carousel/image2.jpg',
