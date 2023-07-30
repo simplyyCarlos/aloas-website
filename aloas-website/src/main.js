@@ -10,9 +10,11 @@ import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import Textarea from 'primevue/textarea';
 import InputText from 'primevue/inputtext';
+import Dropdown from 'primevue/dropdown';
 import 'primevue/resources/themes/lara-light-indigo/theme.css';     
 import 'primevue/resources/primevue.min.css';
-
+import axios from 'axios';
+import VueAxios from 'vue-axios';
 
 
 //Logo
@@ -34,3 +36,5 @@ app.component("Button", Button);
 app.component("Dialog", Dialog);
 app.component("Textarea", Textarea);
 app.component("InputText", InputText);
+app.component("Dropdown", Dropdown);
+app.use(VueAxios, axios);

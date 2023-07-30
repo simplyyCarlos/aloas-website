@@ -3,96 +3,84 @@
   <div class="article-page">
     <h1 class="page-title">Articles</h1>
     <div class="filters">
-      <input type="text" v-model="searchQuery" placeholder="Rechercher un article" class="search-input" />
-      <select v-model="selectedCategory" class="category-select">
-        <option value="">Toutes les catégories</option>
-        <option v-for="category in categories" :value="category">{{ category }}</option>
-      </select>
-      <AddArticlePopup v-if="isAddArticleModalOpen" @close="closeAddArticleModal" />
+      <InputText id="title" v-model="searchQuery" placeholder="Rechercher un article" class="search-input" required />
+      <Dropdown :options="categories" v-model="selectedCategory" optionLabel="libelle" />
+      <AddArticlePopup v-if="isAddArticleModalOpen" @close="closeAddArticleModal" @articleAdded="articleAdded" />
     </div>
     <div class="article-list">
       <div v-for="article in filteredArticles" :key="article.id" class="article-item">
         <img src="../assets/img/articles/articles.jpg" alt="Article" class="article-image" />
         <!-- Replace with your actual article image -->
-        <h2 class="article-title">{{ article.title }}</h2>
-        <p class="article-category">Catégorie: {{ article.category }}</p>
-        <p class="article-content">{{ article.content }}</p>
+        <h2 class="article-title">{{ article.titre }}</h2>
+        <p class="article-category">Catégorie: {{ article.libelle }}</p>
+        <p class="article-content">Auteur : {{ article.nom }} {{ article.prenom }}</p>
       </div>
     </div>
   </div>
+  <Footer />
 </template>
 
 <script>
 import NavBar from '../components/NavBar.vue';
 import AddArticlePopup from '../components/AddArticlePopup.vue';
+import Footer from '../components/Footer.vue';
+import axios from 'axios';
 
 export default {
   data() {
     return {
       isAddArticleModalOpen: true,
       searchQuery: '',
-      selectedCategory: '',
-      articles: [
-        {
-          id: 1,
-          title: "Article 1",
-          category: "Catégorie 1",
-          content: "Contenu de l'article 1"
-        },
-        {
-          id: 2,
-          title: "Article 2",
-          category: "Catégorie 2",
-          content: "Contenu de l'article 2"
-        },
-        {
-          id: 3,
-          title: "Article 3",
-          category: "Catégorie 1",
-          content: "Contenu de l'article 3"
-        },
-        {
-          id: 4,
-          title: "Article 1",
-          category: "Catégorie 1",
-          content: "Contenu de l'article 1"
-        },
-        {
-          id: 5,
-          title: "Article 2",
-          category: "Catégorie 2",
-          content: "Contenu de l'article 2"
-        },
-        {
-          id: 6,
-          title: "Article 3",
-          category: "Catégorie 1",
-          content: "Contenu de l'article 3"
-        },
-      ],
-      categories: ['Catégorie 1', 'Catégorie 2', 'Catégorie 3'] // Replace with your actual categories
+      selectedCategory: { libelle: 'Toutes les categories' },
+      articles: [],
+      categories: [], // Replace with your actual categories
     };
   },
   computed: {
     filteredArticles() {
+      console.log(this.articles);
       return this.articles.filter(
         (article) =>
-          article.title.toLowerCase().includes(this.searchQuery.toLowerCase()) &&
-          (this.selectedCategory === '' || article.category === this.selectedCategory)
+          article.titre.toLowerCase().includes(this.searchQuery.toLowerCase()) &&
+          (this.selectedCategory.libelle === 'Toutes les categories' || article.libelle === this.selectedCategory.libelle)
       );
     }
   },
   methods: {
+    async getAllArticles(){
+      axios.get('http://localhost:8080/src/api/articlesApi.php').then((response) => {
+        this.articles = response.data;
+      }).catch((error) => {
+        console.log(error);
+      });
+    },
+    getAllCategories(){
+      axios.get('http://localhost:8080/src/api/categoriesApi.php').then((response) => {
+        this.categories = response.data;
+        this.categories.unshift({libelle: 'Toutes les categories'});
+      }).catch((error) => {
+        console.log(error);
+      });
+    },
     showAddArticleModal() {
       this.isAddArticleModalOpen = true;
     },
     closeAddArticleModal() {
       this.isAddArticleModalOpen = false;
-    }
+    },
+    async articleAdded() {
+      await this.getAllArticles();
+      this.showAddArticleModal();
+    },
   },
   components: {
     NavBar,
-    AddArticlePopup
+    AddArticlePopup,
+    Footer
+  },
+  created() {
+    this.getAllCategories();
+    this.getAllArticles();
   }
 };
 </script>
