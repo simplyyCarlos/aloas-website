@@ -15,7 +15,7 @@
 
                 <div class="textbox">
                     <font-awesome-icon :icon="['fas', 'lock']" />
-                    <input type="password" placeholder="password" v-model="motDePasse" required>
+                    <input type="password" placeholder="password" v-model="password" required>
                 </div>
 
                 <button class="btn" type="submit"> Sign In</button>
@@ -32,7 +32,7 @@ export default {
         return {
             nom: '',
             email: '',
-            motDePasse: '',
+            password: '',
             showPopup: true,
         };
     },
@@ -41,14 +41,15 @@ export default {
             axios.get('http://localhost:8080/src/api/userApi.php', {
                 params: {
                     email: this.email,
-                    motDePasse: this.motDePasse,
+                    password: this.password,
                 }
             }).then((response) => {
-                if (response.data == "success") {
+                console.log(response);
+                if (response.status === 200) {
                     this.$emit('toggle-login-popup');
-                    this.$emit('login-success');
+                    this.$emit('toggle-user');
                 } else {
-                    alert("Email ou mot de passe incorrect" + $email + $motDePasse);
+                    alert("Erreur : email ou mot de passe incorrect");
                 }
             }).catch((error) => {
                 console.log(error);
