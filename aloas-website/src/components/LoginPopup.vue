@@ -3,141 +3,149 @@
 
         <div class="blur-overlay" v-if="showPopup"></div>
         <div class="login-popup" v-if="showPopup">
-            <form @submit.prevent="submitForm">
-            <h2>Connexion</h2>
-            <div class="close-popup" @click="$emit('toggle-login-popup')">
-                <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
-            </div>
-            <div class="textbox">
-                <font-awesome-icon :icon="['fas', 'user']" />
-                <input type="text" placeholder="Username" v-model="username" required>
-            </div>
+            <form @submit.prevent="handleLogin">
+                <h2>Connexion</h2>
+                <div class="close-popup" @click="$emit('toggle-login-popup')">
+                    <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
+                </div>
+                <div class="textbox">
+                    <font-awesome-icon :icon="['fas', 'user']" />
+                    <input type="text" placeholder="email" v-model="email" required>
+                </div>
 
-            <div class="textbox">
-                <font-awesome-icon :icon="['fas', 'lock']" />
-                <input type="password" placeholder="Password" v-model="password" required>
-            </div>
-            
-            <button class="btn" type="submit"> Sign In</button>
+                <div class="textbox">
+                    <font-awesome-icon :icon="['fas', 'lock']" />
+                    <input type="password" placeholder="password" v-model="motDePasse" required>
+                </div>
+
+                <button class="btn" type="submit"> Sign In</button>
             </form>
         </div>
     </div>
 </template>
 
 <script>
-export default {
-    data(){
-        return {
-            username:'',
-            password:'',
-            showPopup : true
-        }
-    },
-    methods : {
-        async submitForm(){
-            const response = await this.$http.post('api/login', {
-                username : this.username,
-                password: this.password
-            })
+import axios from 'axios';
 
-            if(response.data.success){
-                this.$router.push('/events')
-            }else{
-                alert('Invalid username or password')
-            }
+export default {
+    data() {
+        return {
+            nom: '',
+            email: '',
+            motDePasse: '',
+            showPopup: true,
+        };
+    },
+    methods: {
+        handleLogin() {
+            axios.get('http://localhost:8080/src/api/userApi.php', {
+                params: {
+                    email: this.email,
+                    motDePasse: this.motDePasse,
+                }
+            }).then((response) => {
+                if (response.data == "success") {
+                    this.$emit('toggle-login-popup');
+                    this.$emit('login-success');
+                } else {
+                    alert("Email ou mot de passe incorrect" + $email + $motDePasse);
+                }
+            }).catch((error) => {
+                console.log(error);
+            });
         }
     }
 }
 </script>
 
-<style scoped> 
-   
+<style scoped> * {
+     margin: 0;
+     padding: 0;
+     box-sizing: border-box;
+     font-family: sans-serif;
 
-    *{
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: sans-serif;
-        
-    }
+ }
 
-    .blur-overlay{
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(255, 255, 255, 0);
-        backdrop-filter: blur(5px);
-        z-index: 999;
-    }
-    .login-popup{
-       position: fixed;
-       top: 50%;
-       left: 50%;
-       
-       width: 300px;
-       transform: translate(-50%,-50%);
-       z-index: 1000;
-       background-color: white;
-       padding: 1em;
-       border-radius: 5px;
-       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    }   
-    
-    .login-popup h2{
-        float: left;
-        font-size: 40px;
-        border-bottom: 6px solid #4caf50;
-        margin-bottom: 50px;
-        padding: 13px 0;
-    }
+ .blur-overlay {
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background-color: rgba(255, 255, 255, 0);
+     backdrop-filter: blur(5px);
+     z-index: 999;
+ }
 
-    .textbox{
-        width: 100%;
-        overflow: hidden;
-        font-size: 20px;
-        padding: 8px 0;
-        margin : 8px 0;
-        border-bottom: 1px solid #4caf50;
-    }
+ .login-popup {
+     position: fixed;
+     top: 50%;
+     left: 50%;
 
-    .textbox :first-child {
-        width: 26px;
-        float: left;
-        text-align: center;
-    }
+     width: 300px;
+     transform: translate(-50%, -50%);
+     z-index: 1000;
+     background-color: white;
+     padding: 1em;
+     border-radius: 5px;
+     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+ }
 
-    .textbox input {
-        border: none;
-        outline: none;
-        background: none;
-        font-size: 18px;
-        width: 80%;
-        float: left;
-        margin:  0 10px;
-    }
+ .login-popup h2 {
+     float: left;
+     font-size: 40px;
+     border-bottom: 6px solid #4caf50;
+     margin-bottom: 50px;
+     padding: 13px 0;
+ }
 
-    .close-popup {
-        cursor:pointer;
-        position: fixed;
-        padding: 1em;
-        right: 0;
-        top: 0;
-        transition: transform 0.3s, box-shadow 0.3s;
+ .textbox {
+     width: 100%;
+     overflow: hidden;
+     font-size: 20px;
+     padding: 8px 0;
+     margin: 8px 0;
+     border-bottom: 1px solid #4caf50;
+ }
 
-    }
-    .close-popup:hover{
-        transform: scale(1.1);
-        box-shadow: 0 2px 8px rgba (0,0,0,0.3);
-    }
-    .btn {
-        width: 100%;
-        background: none;
-        border: 2px solid #4caf50;
-        padding: 5px;
-        font-size: 18px;
-        cursor: pointer;
-        margin: 12px 0;
-    }
+ .textbox :first-child {
+     width: 26px;
+     float: left;
+     text-align: center;
+ }
+
+ .textbox input {
+     border: none;
+     outline: none;
+     background: none;
+     font-size: 18px;
+     width: 80%;
+     float: left;
+     margin: 0 10px;
+ }
+
+ .close-popup {
+     cursor: pointer;
+     position: fixed;
+     padding: 1em;
+     right: 0;
+     top: 0;
+     transition: transform 0.3s, box-shadow 0.3s;
+
+ }
+
+ .close-popup:hover {
+     transform: scale(1.1);
+     box-shadow: 0 2px 8px rgba (0, 0, 0, 0.3);
+ }
+
+ .btn {
+     width: 100%;
+     background: none;
+     border: 2px solid #4caf50;
+     padding: 5px;
+     font-size: 18px;
+     cursor: pointer;
+     margin: 12px 0;
+ }
 </style>
