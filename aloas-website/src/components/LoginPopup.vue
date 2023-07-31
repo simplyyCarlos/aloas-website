@@ -34,6 +34,7 @@ export default {
             email: '',
             password: '',
             showPopup: true,
+            user: {},
         };
     },
     methods: {
@@ -44,17 +45,42 @@ export default {
                     password: this.password,
                 }
             }).then((response) => {
-                console.log(response);
-                if (response.status === 200) {
-                    this.$emit('toggle-login-popup');
-                    this.$emit('toggle-user');
-                } else {
-                    alert("Erreur : email ou mot de passe incorrect");
+                if (response != null) {
+                    console.log(response);
+                    if (response.status == 200) {
+                        this.$emit('toggle-login-popup');
+                        // Find the indices of the brackets
+                        const startIndex = response.data.indexOf('{');
+                        const endIndex = response.data.lastIndexOf('}') + 1;
+
+                        // Extract the data inside the brackets, including the brackets
+                        const userData = response.data.substring(startIndex, endIndex);
+                        this.user = JSON.parse(userData);
+                        console.log(this.user.prenom);
+                        this.$emit('login-sucess', this.user);
+                        this.$emit('toggle-login-popup');
+                    }
+                    else if (response.status == 201) {
+                        console.log(response.data);
+                        alert('Email ou mot de passe incorrect');
+                    }
+                    else {
+                        alert('Une erreur est survenue');
+                    }
+                    this.resetInfo();
+                }
+                else {
+                    alert('Une erreur est survenue');
                 }
             }).catch((error) => {
                 console.log(error);
             });
-        }
+        },
+        resetInfo() {
+            this.nom = '';
+            this.email = '';
+            this.password = '';
+        },
     }
 }
 </script>

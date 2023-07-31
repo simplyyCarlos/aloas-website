@@ -1,6 +1,5 @@
 <template>
-  <NavBar :showLoginPopup="showLoginPopup" @toggle-login-popup="toggleLoginPopup" />
-  <LoginPopup :showLoginPopup="showLoginPopup" @toggle-login-popup="toggleLoginPopup" v-if="showLoginPopup" />
+  <NavBar/>
   <div class="carousel">
     <div class="carousel-slides" :style="{ transform: `translateX(-${slideIndex * slideWidth}px)` }">
       <div class="carousel-slide" v-for="(slide, index) in slides" :key="index">
@@ -32,7 +31,6 @@
 import { ref, onMounted } from "vue";
 import NavBar from "../components/NavBar.vue";
 import Footer from "../components/Footer.vue";
-import LoginPopup from "../components/LoginPopup.vue";
 const slides = [
   'src/assets/img/carousel/image1.png',
   'src/assets/img/carousel/image2.jpg',
@@ -86,7 +84,6 @@ const resetAutoScroll = () => {
   export default {
   data() {
     return {
-      showLoginPopup: false,
       activities: [
         {
           id: 1,
@@ -107,11 +104,6 @@ const resetAutoScroll = () => {
       ],
       
     };
-  },
-  methods: {
-    toggleLoginPopup() {
-      this.showLoginPopup = !this.showLoginPopup;
-    },
   },
   components: {
     NavBar

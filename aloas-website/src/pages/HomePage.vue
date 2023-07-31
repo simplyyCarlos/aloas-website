@@ -54,8 +54,7 @@ const resetAutoScroll = () => {
 </script>
 
 <template>
-  <NavBar :showLoginPopup="showLoginPopup" @toggle-login-popup="toggleLoginPopup" />
-  <LoginPopup :showLoginPopup="showLoginPopup" @toggle-login-popup="toggleLoginPopup" v-if="showLoginPopup" />
+  <NavBar/>
   <div class="carousel">
     <div class="carousel-slides" :style="{ transform: `translateX(-${slideIndex * slideWidth}px)` }">
       <div class="carousel-slide" v-for="(slide, index) in slides" :key="index">

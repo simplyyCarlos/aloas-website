@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         $_SESSION["user"] = $row;
         echo json_encode($row);
     } else {
-        http_response_code(401);
+        http_response_code(201);
         echo json_encode(["error" => "Invalid email or password"]);
     }
 }

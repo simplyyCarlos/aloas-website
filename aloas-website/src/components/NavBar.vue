@@ -17,17 +17,27 @@
       <li class="nav-item">Nous contacter</li>
     </ul>
     <div class="sign-in">
-      <i :class="isLoggedIn ? 'fa fa-sign-in' : 'fa fa-sign-out'" @click="$emit('toggle-login-popup')"></i>
+      <template v-if="isLoggedIn">
+        <span>{{ user.nom }} {{ user.prenom }}</span>
+        <i class="fa fa-sign-out" @click="toggleLogin"></i>
+      </template>
+      <template v-else>
+        <i class="fa fa-sign-in" @click="toggleLoginPopup"></i>
+      </template>
     </div>
   </nav>
+  <LoginPopup :showLoginPopup="showLoginPopup" @toggle-login-popup="toggleLoginPopup" @login-sucess="onLoginSucess" v-if="showLoginPopup" />
 </template>
 
 <script>
+import LoginPopup from "./LoginPopup.vue";
 export default {
   data() {
     return {
+      showLoginPopup: false,
       isNavOpen: false,
-      isLoggedIn: false
+      isLoggedIn: false,
+      user:{},
     };
   },
   methods: {
@@ -36,9 +46,22 @@ export default {
     },
     toggleLogin() {
       this.isLoggedIn = !this.isLoggedIn;
-     
-    }
-  }
+      if(!this.isLoggedIn){
+        this.user = {};
+      }      
+    },
+    toggleLoginPopup() {
+      this.showLoginPopup = !this.showLoginPopup;
+    },
+    onLoginSucess(user) {
+      this.user = user;
+      this.toggleLogin();
+      this.toggleLoginPopup();
+    },
+  },
+  components: {
+    LoginPopup,
+  },
 };
 </script>
 
@@ -115,6 +138,16 @@ export default {
 .router-link {
   color: white;
   text-decoration: none;
+}
+
+span{
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-right: 50px;
+  font-size: 1.5rem;
+  transition: 0.3s; /* Add transition property */
+  position: relative; /* Add position relative to create space for the line */
 }
 
 @media (max-width: 1205px) {

@@ -76,7 +76,7 @@ export default {
       this.showAddArticleModal();
     },
     toggleLoginPopup () {
-        this.showLoginPopup =!this.showLoginPopup;
+        this.showLoginPopup = !this.showLoginPopup;
     },
   },
   components: {
