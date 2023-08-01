@@ -1,6 +1,5 @@
 <template>
     <div>
-
         <div class="blur-overlay" v-if="showPopup"></div>
         <div class="login-popup" v-if="showPopup">
             <form @submit.prevent="handleLogin">
@@ -22,18 +21,15 @@
             </form>
         </div>
     </div>
-    <ErrorDialog :errorMessage="errorMessage" v-if="showErrorDialog" />
+    <Toast ref="toast" position="top-right" />
 </template>
 
 <script>
 import axios from 'axios';
-import ErrorDialog from './ErrorDialog.vue';
 
 export default {
     data() {
         return {
-            errorMessage: '',
-            showErrorDialog: false,
             nom: '',
             email: '',
             password: '',
@@ -65,13 +61,10 @@ export default {
                         this.$emit('toggle-login-popup');
                     }
                     else if (response.status == 201) {
-                        console.log(response.data);
-                        this.errorMessage = "Email ou mot de passe incorrect";
-                        this.showErrorDialog = true;
+                        this.showError('Email ou mot de passe incorrect');
                     }
                     else {
-                        this.errorMessage = "Une erreur est survenue";
-                        this.showErrorDialog = true;
+                        this.showError('Une erreur est survenue');
                     }
                     this.resetInfo();
                 }
@@ -87,14 +80,16 @@ export default {
             this.email = '';
             this.password = '';
         },
-    },
-    components: {
-        ErrorDialog,
+        showError(text) {
+            this.$toast.error(text);
+        },
     },
 }
 </script>
 
-<style scoped> * {
+<style scoped> 
+
+* {
      margin: 0;
      padding: 0;
      box-sizing: border-box;
