@@ -22,14 +22,18 @@
             </form>
         </div>
     </div>
+    <ErrorDialog :errorMessage="errorMessage" v-if="showErrorDialog" />
 </template>
 
 <script>
 import axios from 'axios';
+import ErrorDialog from './ErrorDialog.vue';
 
 export default {
     data() {
         return {
+            errorMessage: '',
+            showErrorDialog: false,
             nom: '',
             email: '',
             password: '',
@@ -62,10 +66,12 @@ export default {
                     }
                     else if (response.status == 201) {
                         console.log(response.data);
-                        alert('Email ou mot de passe incorrect');
+                        this.errorMessage = "Email ou mot de passe incorrect";
+                        this.showErrorDialog = true;
                     }
                     else {
-                        alert('Une erreur est survenue');
+                        this.errorMessage = "Une erreur est survenue";
+                        this.showErrorDialog = true;
                     }
                     this.resetInfo();
                 }
@@ -81,7 +87,10 @@ export default {
             this.email = '';
             this.password = '';
         },
-    }
+    },
+    components: {
+        ErrorDialog,
+    },
 }
 </script>
 
