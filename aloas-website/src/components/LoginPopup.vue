@@ -20,17 +20,23 @@
                 <button class="btn" type="submit"> Sign In</button>
             </form>
             <Toast ref="toast" position="top-right" baseZIndex="999" />
+            <a @click="toggleCreateAccountPopup" class="create-account">Pas encore inscrit ? Crée un compte</a>
         </div>
     </div>
+    <CreateAccountPopup :showCreateAccountPopup="showCreateAccountPopup"
+        @toggle-create-account-popup="toggleCreateAccountPopup" @create-account-sucess="onCreateAccountSucess"
+        v-if="showCreateAccountPopup" />
 </template>
 
 <script>
 import axios from 'axios';
-import {useToast} from 'primevue/usetoast'
+import { useToast } from 'primevue/usetoast'
+import CreateAccountPopup from './CreateAccountPopup.vue';
 
 export default {
     data() {
         return {
+            showCreateAccountPopup: false,
             toast: useToast(),
             nom: '',
             email: '',
@@ -92,13 +98,28 @@ export default {
                 life: 3000
             });
         },
+        toggleCreateAccountPopup() {
+            this.showCreateAccountPopup = !this.showCreateAccountPopup;
+        },
+        onCreateAccountSucess(user) {
+            this.user = user;
+            this.toggleCreateAccountPopup();
+            this.toggleLoginPopup();
+            this.toast.add({
+                severity: 'success',
+                summary: 'Compte créé',
+                detail: 'Votre compte a été créé avec succès',
+                life: 3000
+            });
+        },
+    },
+    components: {
+        CreateAccountPopup,
     },
 }
 </script>
 
-<style scoped> 
-
-* {
+<style scoped> * {
      margin: 0;
      padding: 0;
      box-sizing: border-box;
@@ -187,5 +208,15 @@ export default {
      font-size: 18px;
      cursor: pointer;
      margin: 12px 0;
+ }
+
+ .create-account {
+     text-decoration: underline;
+     color: #4caf50;
+     font-size: 14px;
+     margin: 10px 0;
+     display: block;
+     text-align: center;
+     cursor: pointer;
  }
 </style>
