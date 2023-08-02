@@ -19,17 +19,19 @@
 
                 <button class="btn" type="submit"> Sign In</button>
             </form>
+            <Toast ref="toast" position="top-right" baseZIndex="999" />
         </div>
     </div>
-    <Toast ref="toast" position="top-right" />
 </template>
 
 <script>
 import axios from 'axios';
+import {useToast} from 'primevue/usetoast'
 
 export default {
     data() {
         return {
+            toast: useToast(),
             nom: '',
             email: '',
             password: '',
@@ -81,7 +83,14 @@ export default {
             this.password = '';
         },
         showError(text) {
-            this.$toast.error(text);
+            console.log(text);
+            console.log(this.$toast);
+            this.toast.add({
+                severity: 'error',
+                summary: 'Erreur',
+                detail: text,
+                life: 3000
+            });
         },
     },
 }
