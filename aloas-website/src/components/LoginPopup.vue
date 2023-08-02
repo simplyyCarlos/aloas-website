@@ -19,7 +19,7 @@
 
                 <button class="btn" type="submit"> Sign In</button>
             </form>
-            <Toast ref="toast" position="top-right" baseZIndex="999" />
+            <Toast ref="toast" position="top-right"/>
             <a @click="toggleCreateAccountPopup" class="create-account">Pas encore inscrit ? Crée un compte</a>
         </div>
     </div>
@@ -101,10 +101,8 @@ export default {
         toggleCreateAccountPopup() {
             this.showCreateAccountPopup = !this.showCreateAccountPopup;
         },
-        onCreateAccountSucess(user) {
-            this.user = user;
+        onCreateAccountSucess() {
             this.toggleCreateAccountPopup();
-            this.toggleLoginPopup();
             this.toast.add({
                 severity: 'success',
                 summary: 'Compte créé',

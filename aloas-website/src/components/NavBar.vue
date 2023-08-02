@@ -27,7 +27,7 @@
     </div>
   </nav>
   <LoginPopup :showLoginPopup="showLoginPopup" @toggle-login-popup="toggleLoginPopup" @login-sucess="onLoginSucess" v-if="showLoginPopup" />
-  <Toast ref="toast" position="top-right" baseZIndex="999" />
+  <Toast ref="toast" position="top-right"/>
 </template>
 
 <script>
@@ -66,6 +66,12 @@ export default {
       this.user = user;
       this.toggleLogin();
       this.toggleLoginPopup();
+      this.toast.add({
+        severity: "success",
+        summary: "Connexion réussie",
+        detail: "Vous avez été connecté avec succès",
+        life: 3000,
+      });
     },
   },
   components: {

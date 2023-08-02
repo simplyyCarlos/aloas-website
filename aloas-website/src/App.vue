@@ -1,7 +1,24 @@
 
 <template>
-  <router-view></router-view>
+  <router-view :toast="toast"></router-view>
 </template>
+
+<script>
+import { ref } from 'vue';
+import Toast from 'primevue/toast';
+export default {
+  components: {
+    Toast
+  },
+  setup() {
+    const toast = ref(null);
+
+    return {
+      toast
+    };
+  }
+};
+</script>
 
 <style>
   @font-face {

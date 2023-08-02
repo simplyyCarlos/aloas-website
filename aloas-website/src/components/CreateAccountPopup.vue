@@ -28,10 +28,11 @@
             </form>
         </Dialog>
     </div>
+    <Toast ref="toast" position="top-right"/>
 </template>
   
 <script>
-
+import axios from 'axios';
 export default {
     data() {
         return {
@@ -46,14 +47,36 @@ export default {
         };
     },
     methods: {
-
-        closeDialog() {
-            this.resetForm();
-        },
         handleSubmit() {
-            // Vous pouvez ajouter ici la logique pour envoyer les données du formulaire au serveur
-            // Réinitialisez le formulaire et fermez la pop-up après la création réussie du compte
-            this.closeDialog();
+            console.log(this.formData);
+            if (this.formData.password != this.formData.confirmPassword) {
+                console.log("Les mots de passe ne correspondent pas");
+                this.showError('Les mots de passe ne correspondent pas');
+                return;
+            }
+            axios.post('http://localhost:8080/src/api/userApi.php', {
+                prenom: this.formData.firstName,
+                nom: this.formData.lastName,
+                email: this.formData.email,
+                password: this.formData.password,
+            }).then((response) => {
+                if (response != null) {
+                    console.log(response);
+                    if (response.status == 200) {
+                        this.$emit('create-account-sucess');
+                    }
+                    else if (response.status == 201) {
+                        console.log("Email déjà utilisé");
+                        this.showWarning('l\'adresse e-mail est déjà utilisée');
+                    }
+                    else if (response.status == 202) {
+                        this.showError('Impossible de créer le compte');
+                    }
+                    else {
+                        this.showError('Une erreur est survenue');
+                    }
+                }
+            });
         },
         resetForm() {
             this.formData = {
@@ -64,6 +87,22 @@ export default {
                 confirmPassword: '',
             };
             this.$emit('toggle-create-account-popup');
+        },
+        showError(message) {
+            this.$toast.add({
+                severity: 'error',
+                summary: 'Erreur',
+                detail: message,
+                life: 3000,
+            });
+        },
+        showWarning(message) {
+            this.$toast.add({
+                severity: 'warn',
+                summary: 'Attention',
+                detail: message,
+                life: 3000,
+            });
         },
     },
 };

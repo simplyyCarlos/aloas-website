@@ -5,27 +5,30 @@ header("Access-Control-Allow-Headers: *");
 header("Access-Control-Allow-Methods: *");
 session_start();
 
-// Check if the request method is POST
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $data = json_decode(file_get_contents("php://input"), true);
+if ($_SERVER["REQUEST_METHOD"] === "POST"){
+    // Read raw POST data
+    $post_data = json_decode(file_get_contents('php://input'), true);
 
-    $nom = mysqli_real_escape_string($con, $data["nom"]);
-    $prenom = mysqli_real_escape_string($con, $data["prenom"]);
-    $email = mysqli_real_escape_string($con, $data["email"]);
-    $password = mysqli_real_escape_string($con, $data["password"]);
+    // Extract data from the POST request
+    $nom = mysqli_real_escape_string($con, $post_data["nom"]);
+    $prenom = mysqli_real_escape_string($con, $post_data["prenom"]);
+    $email = mysqli_real_escape_string($con, $post_data["email"]);
+    $password = mysqli_real_escape_string($con, $post_data["password"]);
 
     $sql = "SELECT * FROM utilisateurs WHERE mail = '$email'";
     $result = mysqli_query($con, $sql);
-
-    if(mysqli_num_rows($result) > 0) {
+    if(mysqli_num_rows($result) > 0){
+        http_response_code(201);
         echo json_encode(["error" => "Email already exists"]);
     } else {
         $sql = "INSERT INTO utilisateurs (nom, prenom, mail, mot_de_passe) VALUES ('$nom', '$prenom', '$email', '$password')";
-
-        if (mysqli_query($con, $sql)) {
-            echo json_encode(["message" => "User added successfully"]);
+        $result = mysqli_query($con, $sql);
+        if($result){
+            http_response_code(200);
+            echo json_encode(["success" => "User created successfully"]);
         } else {
-            echo json_encode(["error" => "Failed to add the user"]);
+            http_response_code(202);
+            echo json_encode(["error" => "Something went wrong"]);
         }
     }
 }
