@@ -28,11 +28,11 @@
             </form>
         </Dialog>
     </div>
-    <Toast ref="toast" position="top-right"/>
 </template>
   
 <script>
 import axios from 'axios';
+import { toastSuccess, toastError, toastInfo, toastWarn } from '../toastPlugin.js';
 export default {
     data() {
         return {
@@ -48,13 +48,11 @@ export default {
     },
     methods: {
         handleSubmit() {
-            console.log(this.formData);
             if (this.formData.password != this.formData.confirmPassword) {
-                console.log("Les mots de passe ne correspondent pas");
-                this.showError('Les mots de passe ne correspondent pas');
+                toastError('Les mots de passe ne correspondent pas');
                 return;
             }
-            axios.post('http://localhost:8080/src/api/userApi.php', {
+            axios.post('http://localhost:8080/src/api/createAccountApi.php', {
                 prenom: this.formData.firstName,
                 nom: this.formData.lastName,
                 email: this.formData.email,
@@ -66,14 +64,13 @@ export default {
                         this.$emit('create-account-sucess');
                     }
                     else if (response.status == 201) {
-                        console.log("Email déjà utilisé");
-                        this.showWarning('l\'adresse e-mail est déjà utilisée');
+                        toastWarn('Un compte existe déjà avec cette adresse e-mail');
                     }
                     else if (response.status == 202) {
-                        this.showError('Impossible de créer le compte');
+                        toastError('Impossible de créer le compte');
                     }
                     else {
-                        this.showError('Une erreur est survenue');
+                        toastError('Une erreur est survenue');
                     }
                 }
             });
@@ -87,22 +84,6 @@ export default {
                 confirmPassword: '',
             };
             this.$emit('toggle-create-account-popup');
-        },
-        showError(message) {
-            this.$toast.add({
-                severity: 'error',
-                summary: 'Erreur',
-                detail: message,
-                life: 3000,
-            });
-        },
-        showWarning(message) {
-            this.$toast.add({
-                severity: 'warn',
-                summary: 'Attention',
-                detail: message,
-                life: 3000,
-            });
         },
     },
 };

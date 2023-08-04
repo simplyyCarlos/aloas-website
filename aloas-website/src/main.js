@@ -30,7 +30,7 @@ const router = createRouter({
 
 library.add(faUser, faLock, faXmark);
 
-const app = createApp(App);
+export const app = createApp(App);
 app.use(router);
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.mount('#app');

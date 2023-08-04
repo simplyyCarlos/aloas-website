@@ -19,7 +19,6 @@
 
                 <button class="btn" type="submit"> Sign In</button>
             </form>
-            <Toast ref="toast" position="top-right"/>
             <a @click="toggleCreateAccountPopup" class="create-account">Pas encore inscrit ? Crée un compte</a>
         </div>
     </div>
@@ -30,14 +29,13 @@
 
 <script>
 import axios from 'axios';
-import { useToast } from 'primevue/usetoast'
 import CreateAccountPopup from './CreateAccountPopup.vue';
+import { toastSuccess, toastError, toastInfo, toastWarn } from '../toastPlugin.js';
 
 export default {
     data() {
         return {
             showCreateAccountPopup: false,
-            toast: useToast(),
             nom: '',
             email: '',
             password: '',
@@ -69,15 +67,15 @@ export default {
                         this.$emit('toggle-login-popup');
                     }
                     else if (response.status == 201) {
-                        this.showError('Email ou mot de passe incorrect');
+                        toastError('Identifiants incorrects');
                     }
                     else {
-                        this.showError('Une erreur est survenue');
+                        toastError('Une erreur est survenue');
                     }
                     this.resetInfo();
                 }
                 else {
-                    alert('Une erreur est survenue');
+                    toastError('Une erreur est survenue');
                 }
             }).catch((error) => {
                 console.log(error);
@@ -88,27 +86,12 @@ export default {
             this.email = '';
             this.password = '';
         },
-        showError(text) {
-            console.log(text);
-            console.log(this.$toast);
-            this.toast.add({
-                severity: 'error',
-                summary: 'Erreur',
-                detail: text,
-                life: 3000
-            });
-        },
         toggleCreateAccountPopup() {
             this.showCreateAccountPopup = !this.showCreateAccountPopup;
         },
         onCreateAccountSucess() {
             this.toggleCreateAccountPopup();
-            this.toast.add({
-                severity: 'success',
-                summary: 'Compte créé',
-                detail: 'Votre compte a été créé avec succès',
-                life: 3000
-            });
+            toastSuccess('Votre compte a été créé avec succès');
         },
     },
     components: {

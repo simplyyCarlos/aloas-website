@@ -27,16 +27,15 @@
     </div>
   </nav>
   <LoginPopup :showLoginPopup="showLoginPopup" @toggle-login-popup="toggleLoginPopup" @login-sucess="onLoginSucess" v-if="showLoginPopup" />
-  <Toast ref="toast" position="top-right"/>
 </template>
 
 <script>
 import LoginPopup from "./LoginPopup.vue";
-import { useToast } from "primevue/usetoast";
+import { toastSuccess, toastError, toastInfo, toastWarn } from '../toastPlugin.js';
+
 export default {
   data() {
     return {
-      toast: useToast(),
       showLoginPopup: false,
       isNavOpen: false,
       isLoggedIn: false,
@@ -51,12 +50,7 @@ export default {
       this.isLoggedIn = !this.isLoggedIn;
       if(!this.isLoggedIn){
         this.user = {};
-        this.toast.add({
-          severity: "success",
-          summary: "Déconnexion réussie",
-          detail: "Vous avez été déconnecté avec succès",
-          life: 3000,
-        });
+        toastSuccess('Vous avez été déconnecté avec succès');
       }      
     },
     toggleLoginPopup() {
@@ -66,12 +60,7 @@ export default {
       this.user = user;
       this.toggleLogin();
       this.toggleLoginPopup();
-      this.toast.add({
-        severity: "success",
-        summary: "Connexion réussie",
-        detail: "Vous avez été connecté avec succès",
-        life: 3000,
-      });
+      toastSuccess('Vous êtes connecté avec succès');
     },
   },
   components: {
