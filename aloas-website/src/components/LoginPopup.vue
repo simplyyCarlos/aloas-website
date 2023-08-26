@@ -55,14 +55,8 @@ export default {
                     console.log(response);
                     if (response.status == 200) {
                         this.$emit('toggle-login-popup');
-                        // Find the indices of the brackets
-                        const startIndex = response.data.indexOf('{');
-                        const endIndex = response.data.lastIndexOf('}') + 1;
-
-                        // Extract the data inside the brackets, including the brackets
-                        const userData = response.data.substring(startIndex, endIndex);
-                        this.user = JSON.parse(userData);
-                        console.log(this.user.prenom);
+                        const userData = response.data
+                        this.user = JSON.stringify(userData);
                         this.$emit('login-sucess', this.user);
                         this.$emit('toggle-login-popup');
                     }

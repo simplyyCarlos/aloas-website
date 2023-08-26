@@ -57,7 +57,9 @@ export default {
       this.showLoginPopup = !this.showLoginPopup;
     },
     onLoginSucess(user) {
-      this.user = user;
+      this.user = JSON.parse(user);
+      console.log(this.user.nom);
+      console.log(this.user.prenom);
       this.toggleLogin();
       this.toggleLoginPopup();
       toastSuccess('Vous êtes connecté avec succès');
