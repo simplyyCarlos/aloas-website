@@ -27,13 +27,12 @@
     </div>
   </nav>
   <LoginPopup :showLoginPopup="showLoginPopup" @toggle-login-popup="toggleLoginPopup" @login-sucess="onLoginSucess"
-    @show-sucess="onShowSucess" @show-error="onShowError" @show-warning="onShowWarning" v-if="showLoginPopup" />
-  <Toast />
+     v-if="showLoginPopup" />
 </template>
 
 <script>
 import LoginPopup from "./LoginPopup.vue";
-import { useToast } from "primevue/usetoast";
+import { showSucess } from "../toastService";
 export default {
   data() {
     return {
@@ -41,7 +40,6 @@ export default {
       isNavOpen: false,
       isLoggedIn: false,
       user: {},
-      toast: useToast(),
     };
   },
   methods: {
@@ -52,12 +50,7 @@ export default {
       this.isLoggedIn = !this.isLoggedIn;
       if (!this.isLoggedIn) {
         this.user = {};
-        this.toast.add({
-          severity: "success",
-          summary: "Succès",
-          detail: "Vous êtes déconnecté avec succès",
-          life: 3000,
-        });
+        showSucess("Vous êtes déconnecté");
       }
     },
     toggleLoginPopup() {
@@ -69,36 +62,7 @@ export default {
       console.log(this.user.prenom);
       this.toggleLogin();
       this.toggleLoginPopup();
-      this.toast.add({
-        severity: "success",
-        summary: "Succès",
-        detail: "Vous êtes connecté avec succès",
-        life: 3000,
-      });
-    },
-    onShowSucess(message) {
-      this.toast.add({
-        severity: "success",
-        summary: "Succès",
-        detail: message,
-        life: 3000,
-      });
-    },
-    onShowError(message) {
-      this.toast.add({
-        severity: "error",
-        summary: "Erreur",
-        detail: message,
-        life: 3000,
-      });
-    },
-    onShowWarning(message) {
-      this.toast.add({
-        severity: "warning",
-        summary: "Attention",
-        detail: message,
-        life: 3000,
-      });
+      showSucess("Vous êtes connecté");
     },
   },
   components: {

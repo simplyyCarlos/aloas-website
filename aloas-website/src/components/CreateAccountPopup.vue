@@ -32,6 +32,8 @@
   
 <script>
 import axios from 'axios';
+import { showError, showWarn } from '../toastService';
+
 export default {
     data() {
         return {
@@ -48,7 +50,7 @@ export default {
     methods: {
         handleSubmit() {
             if (this.formData.password != this.formData.confirmPassword) {
-                this.$emit('show-warning-create-account', 'Les mots de passe ne correspondent pas');
+                showWarn('Les mots de passe ne correspondent pas');
                 return;
             }
             axios.post('http://localhost:8080/src/api/createAccountApi.php', {
@@ -63,13 +65,13 @@ export default {
                         this.$emit('create-account-sucess');
                     }
                     else if (response.status == 201) {
-                        this.$emit('show-warning-create-account', 'Email déjà utilisé');
+                        showWarn('Adresse e-mail déjà utilisée');
                     }
                     else if (response.status == 202) {
-                        this.$emit('show-error-create-account', 'Impossible de créer le compte');
+                        showError('Impossible de créer le compte');
                     }
                     else {
-                        this.$emit('show-error-create-account', 'Une erreur est survenue');
+                        showError('Une erreur est survenue');
                     }
                 }
             });

@@ -24,13 +24,13 @@
     </div>
     <CreateAccountPopup :showCreateAccountPopup="showCreateAccountPopup"
         @toggle-create-account-popup="toggleCreateAccountPopup" @create-account-sucess="onCreateAccountSucess"
-        @show-error-sucess-account="onShowSucess" @show-error-create-account="onShowError" @show-warning-create-account="onShowWarning"
         v-if="showCreateAccountPopup" />
 </template>
 
 <script>
 import axios from 'axios';
 import CreateAccountPopup from './CreateAccountPopup.vue';
+import { showSucess, showError } from '../toastService';
 
 export default {
     data() {
@@ -61,15 +61,15 @@ export default {
                         this.$emit('toggle-login-popup');
                     }
                     else if (response.status == 201) {
-                        this.onShowError('Email ou mot de passe incorrect');
+                        showError('Identifiants incorrects');
                     }
                     else {
-                        this.onShowError('Une Erreur est survenue');
+                        showError('Une Erreur est survenue');
                     }
                     this.resetInfo();
                 }
                 else {
-                    this.onShowError('Une Erreur est survenue');
+                    showError('Une Erreur est survenue');
                 }
             }).catch((error) => {
                 console.log(error);
@@ -85,16 +85,7 @@ export default {
         },
         onCreateAccountSucess() {
             this.toggleCreateAccountPopup();
-            this.onShowSucess('Compte créé avec succès');
-        },
-        onShowSucess(message) {
-            this.$emit('show-sucess', message);
-        },
-        onShowError(message) {
-            this.$emit('show-error', message);
-        },
-        onShowWarning(message) {
-            this.$emit('show-warning', message);
+            this.showSucess('Compte créé avec succès');
         },
     },
     components: {
