@@ -27,7 +27,7 @@
     </div>
   </nav>
   <LoginPopup :showLoginPopup="showLoginPopup" @toggle-login-popup="toggleLoginPopup" @login-sucess="onLoginSucess"
-     v-if="showLoginPopup" />
+    v-if="showLoginPopup" />
 </template>
 
 <script>
@@ -38,8 +38,8 @@ export default {
     return {
       showLoginPopup: false,
       isNavOpen: false,
-      isLoggedIn: false,
-      user: {},
+      isLoggedIn: localStorage.getItem('user') !== null,
+      user: localStorage.getItem('user') !== null ? JSON.parse(localStorage.getItem('user')) : {},
     };
   },
   methods: {
@@ -51,6 +51,10 @@ export default {
       if (!this.isLoggedIn) {
         this.user = {};
         showSucess("Vous êtes déconnecté");
+        // Supprimez l'entrée du stockage local
+        localStorage.removeItem('user');
+        // Réinitialisez la propriété $user dans les globalProperties
+        this.$root.$user = null;
       }
     },
     toggleLoginPopup() {
@@ -58,6 +62,7 @@ export default {
     },
     onLoginSucess(user) {
       this.user = JSON.parse(user);
+      localStorage.setItem('user', JSON.stringify(user));
       console.log(this.user.nom);
       console.log(this.user.prenom);
       this.toggleLogin();
@@ -238,4 +243,5 @@ span {
     transform: translateY(-50%);
     padding: 20px;
   }
-}</style>
+}
+</style>
