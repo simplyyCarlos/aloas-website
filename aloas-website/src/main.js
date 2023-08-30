@@ -43,4 +43,5 @@ app.component("Toast", Toast);
 app.component("Password", Password);
 app.use(ToastService);
 app.use(VueAxios, axios);
+
 app.mount('#app');

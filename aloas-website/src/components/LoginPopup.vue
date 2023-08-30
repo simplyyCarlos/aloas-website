@@ -85,7 +85,7 @@ export default {
         },
         onCreateAccountSucess() {
             this.toggleCreateAccountPopup();
-            this.showSucess('Compte créé avec succès');
+            showSucess('Compte créé avec succès');
         },
     },
     components: {
