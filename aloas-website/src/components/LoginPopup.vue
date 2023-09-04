@@ -108,7 +108,6 @@ export default {
      position: fixed;
      top: 50%;
      left: 50%;
-
      width: 300px;
      transform: translate(-50%, -50%);
      z-index: 1000;

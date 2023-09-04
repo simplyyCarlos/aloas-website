@@ -1,6 +1,6 @@
 <template>
   <div class="calendar">
-    <FullCalendar :options="calendarOptions" />
+    <FullCalendar ref ="calendar" :options="calendarOptions" />
     <div class="divider"></div>
   </div>
 </template>
@@ -20,10 +20,17 @@ export default {
     return {
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-        initialView: 'timeGridWeek',
+        initialView: 'dayGridMonth',
         contentHeight: 'auto',
         locale: frLocale,
         allDaySlot: false, // Remove "All-day" box
+        dateClick : this.handleDateClick,
+        eventClick: this.handleEventClick,
+        events: [
+          { title: 'event 1', start: '2023-09-01T08:00:00', end: '2023-09-01T10:00:00' },
+          { title: 'event 2', start: '2023-09-01T10:00:00', end: '2023-09-01T14:00:00' }, // Event with specific times
+
+        ],
         headerToolbar: {
           left: 'prev,next today',
           center: 'title',
@@ -41,23 +48,28 @@ export default {
         slotDuration: '0:30:00',
         selectable: true // Allow selecting dates on the calendar
       },
-      selectedDate: null
+     
     }
   },
   methods: {
-    handleSlotDblClick(arg){
-      const newEvent = {
-        title: 'Nouvel événement',
-        start: arg.date,
-        end: arg.date,
-        allDay: false
-      };
-      this.calendarOptions.events = [...this.calendarOptions.events, newEvent];
+    handleDateClick : function (arg) {
+      
+    },
+    handleEventClick : function (info){
+      if(info.jsEvent.button === 0) {
+        console.log("ok")
+        const confirmation = window.confirm(`Voulez vous supprimez ${info.event.title} ?`);
+        if(confirmation) {
+          info.event.remove();
+          alert("L'évenement à été supprimmé !");
+        }
+      }
+      else if(info.view.type === 'dayGridMonth'){
+        this.$refs.calendar.getApi().changeView('timeGridWeek','2023-09-01');
+      }
     }
   }
 }
 </script>
 
-<style>
 
-</style>
