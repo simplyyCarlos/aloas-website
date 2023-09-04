@@ -1,3 +1,31 @@
+<script>
+import {mapState, mapActions} from 'vuex';
+import LoginPopup from "./LoginPopup.vue";
+export default {
+  computed:{
+    ...mapState(["isAuthenticated","user"]),
+  },
+  methods: {
+    ...mapActions(["logout"]),
+    toggleNav(){
+      this.isNavOpen = !this.isNavOpen;
+    },
+    toggleLoginPopup() {
+      this.showLoginPopup = !this.showLoginPopup;
+    },
+  },
+  components : {
+    LoginPopup,
+  },
+  data(){
+    return {
+      showLoginPopup: false,
+      isNavOpen: false,
+    };
+  },
+};
+</script>
+
 <template>
   <nav class="navbar">
     <div class="logo">
@@ -17,64 +45,19 @@
       <li class="nav-item">Nous contacter</li>
     </ul>
     <div class="sign-in">
-      <template v-if="isLoggedIn">
+      <template v-if="isAuthenticated">
         <span>{{ user.nom }} {{ user.prenom }}</span>
-        <i class="fa fa-sign-out" @click="toggleLogin"></i>
+        <i class="fa fa-sign-out" @click="logout()"></i>
       </template>
       <template v-else>
         <i class="fa fa-sign-in" @click="toggleLoginPopup"></i>
       </template>
     </div>
   </nav>
-  <LoginPopup :showLoginPopup="showLoginPopup" @toggle-login-popup="toggleLoginPopup" @login-sucess="onLoginSucess"
-    v-if="showLoginPopup" />
+  <LoginPopup  @toggle-login-popup="toggleLoginPopup"  v-if="showLoginPopup"/>
 </template>
 
-<script>
-import LoginPopup from "./LoginPopup.vue";
-import { showSucess } from "../toastService";
-export default {
-  data() {
-    return {
-      showLoginPopup: false,
-      isNavOpen: false,
-      isLoggedIn: localStorage.getItem('user') !== null,
-      user: localStorage.getItem('user') !== null ? JSON.parse(localStorage.getItem('user')) : {},
-    };
-  },
-  methods: {
-    toggleNav() {
-      this.isNavOpen = !this.isNavOpen;
-    },
-    toggleLogin() {
-      this.isLoggedIn = !this.isLoggedIn;
-      if (!this.isLoggedIn) {
-        this.user = {};
-        showSucess("Vous êtes déconnecté");
-        // Supprimez l'entrée du stockage local
-        localStorage.removeItem('user');
-        // Réinitialisez la propriété $user dans les globalProperties
-        this.$root.$user = null;
-      }
-    },
-    toggleLoginPopup() {
-      this.showLoginPopup = !this.showLoginPopup;
-    },
-    onLoginSucess(user) {
-      this.user = JSON.parse(user);
-      localStorage.setItem('user', JSON.stringify(user));
-      console.log(this.user.nom);
-      console.log(this.user.prenom);
-      this.toggleLogin();
-      this.toggleLoginPopup();
-      showSucess("Vous êtes connecté");
-    },
-  },
-  components: {
-    LoginPopup,
-  },
-};
-</script>
+
 
 <style scoped>
 .navbar {

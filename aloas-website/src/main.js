@@ -1,5 +1,6 @@
 import { createApp } from 'vue';
 import App from './App.vue';
+import store from './store';
 import { createRouter, createWebHistory } from 'vue-router';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -33,6 +34,7 @@ library.add(faUser, faLock, faXmark);
 export const app = createApp(App);
 
 app.use(router);
+app.use(store)
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.use(PrimeVue);
 app.component("Button", Button);
@@ -44,5 +46,4 @@ app.component("Toast", Toast);
 app.component("Password", Password);
 app.use(ToastService);
 app.use(VueAxios, axios);
-
 app.mount('#app');

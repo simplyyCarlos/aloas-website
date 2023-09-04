@@ -11,6 +11,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
 import frLocale from '@fullcalendar/core/locales/fr'
 import timeGridPlugin from '@fullcalendar/timegrid'
+import {mapState, mapActions} from 'vuex';
 
 export default {
   components: {
@@ -46,7 +47,7 @@ export default {
         slotMinTime: '08:00:00',
         slotMaxTime: '22:00:00',
         slotDuration: '0:30:00',
-        selectable: true // Allow selecting dates on the calendar
+        selectable: true,
       },
      
     }

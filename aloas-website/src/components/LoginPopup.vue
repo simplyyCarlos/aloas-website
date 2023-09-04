@@ -1,10 +1,10 @@
 <template>
     <div>
-        <div class="blur-overlay" v-if="showPopup"></div>
-        <div class="login-popup" v-if="showPopup">
+        <div class="blur-overlay"></div>
+        <div class="login-popup">
             <form @submit.prevent="handleLogin">
                 <h2>Connexion</h2>
-                <div class="close-popup" @click="$emit('toggle-login-popup')">
+                <div class="close-popup" @click="this.$emit('toggle-login-popup')">
                     <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
                 </div>
                 <div class="textbox">
@@ -28,58 +28,27 @@
 </template>
 
 <script>
-import axios from 'axios';
-import CreateAccountPopup from './CreateAccountPopup.vue';
-import { showSucess, showError } from '../toastService';
-
-export default {
-    data() {
-        return {
-            showCreateAccountPopup: false,
-            nom: '',
-            email: '',
-            password: '',
-            showPopup: true,
-            user: {},
-        };
-    },
-    methods: {
-        handleLogin() {
-            axios.get('http://localhost:8080/src/api/userApi.php', {
-                params: {
-                    email: this.email,
-                    password: this.password,
-                }
-            }).then((response) => {
-                if (response != null) {
-                    console.log(response);
-                    if (response.status == 200) {
-                        this.$emit('toggle-login-popup');
-                        const userData = response.data
-                        this.user = JSON.stringify(userData);
-                        this.$emit('login-sucess', this.user);
-                        this.$emit('toggle-login-popup');
-                    }
-                    else if (response.status == 201) {
-                        showError('Identifiants incorrects');
-                    }
-                    else {
-                        showError('Une Erreur est survenue');
-                    }
-                    this.resetInfo();
-                }
-                else {
-                    showError('Une Erreur est survenue');
-                }
-            }).catch((error) => {
-                console.log(error);
-            });
+    import CreateAccountPopup from './CreateAccountPopup.vue'
+    export default {
+        data() {
+            return {
+                email: "",
+                password : "",
+            };
         },
-        resetInfo() {
-            this.nom = '';
-            this.email = '';
-            this.password = '';
-        },
+        methods: {
+            async handleLogin(){
+                try {
+                    await this.$store.dispatch("login", {
+                        email: this.email,
+                        password: this.password,
+                    });
+                    this.$emit("toggle-login-popup");
+                }catch(error){
+                    console.error(error);
+                }
+            },
+            
         toggleCreateAccountPopup() {
             this.showCreateAccountPopup = !this.showCreateAccountPopup;
         },
@@ -117,7 +86,9 @@ export default {
      position: fixed;
      top: 50%;
      left: 50%;
-     width: 300px;
+     min-width: 350px;
+     max-width: 500px;
+     width: 70%;
      transform: translate(-50%, -50%);
      z-index: 1000;
      background-color: white;
@@ -134,6 +105,10 @@ export default {
      padding: 13px 0;
  }
 
+ .login-popup .btn:hover {
+    background-color: #4caf50;
+    color: white;
+ }
  .textbox {
      width: 100%;
      overflow: hidden;

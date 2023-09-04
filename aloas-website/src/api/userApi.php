@@ -13,10 +13,9 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     $result = mysqli_query($con, $sql);
 
     if (mysqli_num_rows($result) > 0) {
-        http_response_code(200);
         $row = mysqli_fetch_assoc($result);
-        $_SESSION["user"] = $row;
-        echo json_encode($row);
+        http_response_code(200);
+        echo json_encode($row); // Send the user data as a JSON response
     } else {
         http_response_code(201);
         echo json_encode(["error" => "Invalid email or password"]);

@@ -5,8 +5,6 @@ import NavBar from '../components/NavBar.vue';
 
 <template>
     <NavBar/>
-   
-    
     <main class="calendar">
         <CalendarComponent></CalendarComponent>
     </main>

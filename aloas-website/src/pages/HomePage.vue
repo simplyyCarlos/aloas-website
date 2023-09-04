@@ -238,6 +238,8 @@ const resetAutoScroll = () => {
   margin-bottom: 0;
 }
 
+
+
 .container {
   position: relative;
   display: grid;
@@ -245,6 +247,7 @@ const resetAutoScroll = () => {
   grid-gap: 50px;
   margin-top: -50px;
   z-index: 2;
+  
 }
 
 .recent-articles {
