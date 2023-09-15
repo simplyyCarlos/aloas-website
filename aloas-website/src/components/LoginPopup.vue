@@ -19,39 +19,41 @@
 
                 <button class="btn" type="submit"> Sign In</button>
             </form>
-            <a @click="toggleCreateAccountPopup" class="create-account">Pas encore inscrit ? Crée un compte</a>
+            <a @click="actionToggleCreateAccountPopUp()" class="create-account">Pas encore inscrit ? Crée un compte</a>
         </div>
     </div>
-    <CreateAccountPopup :showCreateAccountPopup="showCreateAccountPopup"
+    <CreateAccountPopup :showCreateAccountPopup="showCreateAccountPopUp"
         @toggle-create-account-popup="toggleCreateAccountPopup" @create-account-sucess="onCreateAccountSucess"
-        v-if="showCreateAccountPopup" />
+        v-if="showCreateAccountPopUp" />
 </template>
 
 <script>
-    import CreateAccountPopup from './CreateAccountPopup.vue'
-    export default {
-        data() {
-            return {
-                email: "",
-                password : "",
-            };
+import CreateAccountPopup from './CreateAccountPopup.vue'
+import {mapState, mapActions} from 'vuex';
+import {showSucess} from '../toastService';
+export default {
+    data() {
+        return {
+            email: "",
+            password: "",
+        };
+    },
+    computed: {
+        ...mapState(["showCreateAccountPopUp"]),
+    },
+    methods: {
+        async handleLogin() {
+            try {
+                await this.$store.dispatch("login", {
+                    email: this.email,
+                    password: this.password,
+                });
+                this.$emit("toggle-login-popup");
+            } catch (error) {
+                console.error(error);
+            }
         },
-        methods: {
-            async handleLogin(){
-                try {
-                    await this.$store.dispatch("login", {
-                        email: this.email,
-                        password: this.password,
-                    });
-                    this.$emit("toggle-login-popup");
-                }catch(error){
-                    console.error(error);
-                }
-            },
-            
-        toggleCreateAccountPopup() {
-            this.showCreateAccountPopup = !this.showCreateAccountPopup;
-        },
+        ...mapActions(["actionToggleCreateAccountPopUp"]),
         onCreateAccountSucess() {
             this.toggleCreateAccountPopup();
             showSucess('Compte créé avec succès');
@@ -106,9 +108,10 @@
  }
 
  .login-popup .btn:hover {
-    background-color: #4caf50;
-    color: white;
+     background-color: #4caf50;
+     color: white;
  }
+
  .textbox {
      width: 100%;
      overflow: hidden;
