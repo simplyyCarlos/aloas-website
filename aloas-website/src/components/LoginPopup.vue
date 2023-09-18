@@ -55,7 +55,6 @@ export default {
         },
         ...mapActions(["actionToggleCreateAccountPopUp"]),
         onCreateAccountSucess() {
-            this.toggleCreateAccountPopup();
             showSucess('Compte créé avec succès');
         },
     },
