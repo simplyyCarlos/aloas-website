@@ -1,7 +1,6 @@
 <template>
   <div class="calendar">
     <FullCalendar ref ="calendar" :options="calendarOptions" />
-    <div class="divider"></div>
   </div>
 </template>
 
@@ -82,16 +81,10 @@ export default {
   align-items: center;
   padding: 20px;
   margin: 20px;
-  border-radius: 1rem; /* Add border radius */
-  background-color: #e0e0e0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f0f0f0;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.419);
 }
 
-/* Style for the divider */
-.divider {
-  margin: 20px 0;
-  width: 100%;
-  height: 2px;
-  background-color: #ccc;
-}
 </style>
