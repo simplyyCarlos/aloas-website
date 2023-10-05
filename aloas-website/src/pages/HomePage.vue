@@ -91,7 +91,6 @@ const resetAutoScroll = () => {
       </ul>
     </aside>
   </main>
-  <Footer />
 </template>
 
 <script>
@@ -253,6 +252,8 @@ const resetAutoScroll = () => {
 .recent-articles {
   margin-bottom: 20px;
   margin-left: 25%;
+  height: 700px;
+  min-height: 600px;
   background-color: #ffffff;
   border-radius: 1%;
   box-shadow: 0.5px 0.5px 0.5px 1px rgba(0, 0, 0, 0.315);
@@ -299,6 +300,8 @@ const resetAutoScroll = () => {
   background-color: #ffffff;
   padding: 10px;
   width: 70%;
+  min-height: 600px;
+  height: 700px;
   border-radius: 2%;
   box-shadow: 0.5px 0.5px 0.5px 1px rgb(0, 0, 0,0.315);
 }
