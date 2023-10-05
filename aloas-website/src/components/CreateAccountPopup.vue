@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Dialog v-model:visible="showCreateAccountPopup" header="Création de compte" modal>
+        <Dialog v-model:visible="localShowCreateAccountPopUp" header="Création de compte" modal >
             <form @submit.prevent="handleSubmit">
                 <div class="p-field">
                     <label for="firstName">Prénom</label>
@@ -33,11 +33,10 @@
 <script>
 import axios from 'axios';
 import { showError, showWarn } from '../toastService';
-
+import {mapState, mapActions, mapMutations} from 'vuex';
 export default {
     data() {
         return {
-            showCreateAccountPopup: true,
             formData: {
                 firstName: '',
                 lastName: '',
@@ -47,7 +46,20 @@ export default {
             },
         };
     },
+    computed: {
+        ...mapState(["showCreateAccountPopUp"]),
+        localShowCreateAccountPopUp: {
+            get() {
+                return this.showCreateAccountPopUp;
+            },
+            set(value) {
+                this.mutationToggleCreateAccountPopUp();
+            },
+        },
+    },
     methods: {
+        ...mapActions(["actionToggleCreateAccountPopUp"]),
+        ...mapMutations(["mutationToggleCreateAccountPopUp"]),
         handleSubmit() {
             if (this.formData.password != this.formData.confirmPassword) {
                 showWarn('Les mots de passe ne correspondent pas');
