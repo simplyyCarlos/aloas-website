@@ -63,6 +63,7 @@ export default {
 .navbar {
   background-color: rgb(95, 197, 95);
   height: 100px;
+  width: 100%;
   display: flex;
   align-items: center;
   padding: 0 20px;

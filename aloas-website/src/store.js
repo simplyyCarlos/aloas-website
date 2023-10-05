@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import axios from 'axios';
+import { loginUser } from './api'; // Import the API function
 
 export default createStore({
   state: {
@@ -19,21 +19,9 @@ export default createStore({
   actions: {
     async login({ commit }, { email, password }) {
       try {
-        const response = await axios.get('http://localhost:8080/src/api/userApi.php', {
-          params: {
-            email,
-            password,
-          },
-        });
-
-        if (response.status === 200) {
-          const userData = response.data;
-          commit('loginUser', userData);
-        } else if (response.status === 201) {
-          throw new Error('Email ou mot de passe incorrect');
-        } else {
-          throw new Error('Une erreur est survenue');
-        }
+        // Call the API function for login
+        const userData = await loginUser(email, password);
+        commit('loginUser', userData);
       } catch (error) {
         console.error(error);
         throw error; // Rethrow the error to be caught by the component
