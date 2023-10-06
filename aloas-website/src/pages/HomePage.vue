@@ -54,7 +54,7 @@ const resetAutoScroll = () => {
 </script>
 
 <template>
-  <NavBar/>
+  <NavBar />
   <div class="carousel">
     <div class="carousel-slides" :style="{ transform: `translateX(-${slideIndex * slideWidth}px)` }">
       <div class="carousel-slide" v-for="(slide, index) in slides" :key="index">
@@ -75,10 +75,11 @@ const resetAutoScroll = () => {
       <h2 class="section-title">Articles récents</h2>
       <div class="article-list">
         <div v-for="article in articles" :key="article.id" class="article-item">
-          <img :src="article.image" alt="Article Image" class="article-image">
-          <div class="article-content">
-            <h3 class="article-title"><a :href="article.link">{{ article.title }}</a></h3>
-          </div>
+          <img src="../assets/img/articles/articles.jpg" alt="Article" class="article-image" />
+          <!-- Replace with your actual article image -->
+          <h2 class="article-title">{{ article.titre }}</h2>
+          <p class="article-category">Catégorie: {{ article.libelle }}</p>
+          <p class="article-content">Auteur : {{ article.nom }} {{ article.prenom }}</p>
         </div>
       </div>
     </div>
@@ -95,70 +96,30 @@ const resetAutoScroll = () => {
 </template>
 
 <script>
-  export default {
-    data() {
-        return {
-          showLoginPopup : false,
-            articles: [
-                {
-                    id: 1,
-                    title: "Titre de l'article 1",
-                    image: "src/assets/img/articles/articles.jpg",
-                    link: "/articles/1"
-                },
-                {
-                    id: 2,
-                    title: "Titre de l'article 2",
-                    image: "src/assets/img/articles/articles.jpg",
-                    link: "/articles/2"
-                },
-                {
-                    id: 3,
-                    title: "Titre de l'article 3",
-                    image: "src/assets/img/articles/articles.jpg",
-                    link: "/articles/3"
-                },
-                {
-                    id: 4,
-                    title: "Titre de l'article 4",
-                    image: "src/assets/img/articles/articles.jpg",
-                    link: "/articles/4"
-                },
-                {
-                    id: 5,
-                    title: "Titre de l'article 5",
-                    image: "src/assets/img/articles/articles.jpg",
-                    link: "/articles/5"
-                },
-                {
-                    id: 6,
-                    title: "Titre de l'article 6",
-                    image: "src/assets/img/articles/articles.jpg",
-                    link: "/articles/6"
-                }
-            ],
-            events: [
-                {
-                    id: 1,
-                    title: "Événement 1"
-                },
-                {
-                    id: 2,
-                    title: "Événement 2"
-                },
-                {
-                    id: 3,
-                    title: "Événement 3"
-                }
-            ]
-        };
+import axios from 'axios';
+export default {
+  data() {
+    return {
+      showLoginPopup: false,
+      articles: [],
+    };
+  },
+  components: { LoginPopup },
+  methods: {
+    toggleLoginPopup() {
+      this.showLoginPopup = !this.showLoginPopup;
     },
-    components: { LoginPopup },
-    methods : {
-      toggleLoginPopup () {
-        this.showLoginPopup =!this.showLoginPopup;
-      }
-    }
+    async getAllArticles() {
+      axios.get('http://localhost:8080/src/api/articlesLimitApi.php').then((response) => {
+        this.articles = response.data;
+      }).catch((error) => {
+        console.log(error);
+      });
+    },
+  },
+  created() {
+    this.getAllArticles();
+  },
 };
 </script>
 
@@ -247,7 +208,8 @@ const resetAutoScroll = () => {
   grid-gap: 50px;
   margin-top: -50px;
   z-index: 2;
-  
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* Deux colonnes */
+  grid-template-rows: repeat(3, auto); /* Trois lignes automatiques */
 }
 
 .recent-articles {
@@ -266,8 +228,8 @@ const resetAutoScroll = () => {
 
 .article-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  grid-gap: 20px;
+  grid-template-columns: repeat(2, 1fr); /* Deux colonnes */
+  grid-gap: 20px; /* Espacement entre les articles */
   padding: 20px;
 }
 
@@ -300,7 +262,7 @@ const resetAutoScroll = () => {
   padding: 10px;
   width: 70%;
   border-radius: 2%;
-  box-shadow: 0.5px 0.5px 0.5px 1px rgb(0, 0, 0,0.315);
+  box-shadow: 0.5px 0.5px 0.5px 1px rgb(0, 0, 0, 0.315);
 }
 
 .event-list {
@@ -314,9 +276,9 @@ const resetAutoScroll = () => {
 }
 
 @media (max-width: 1050px) {
-    .carousel {
-      height: 18rem;
-    }
+  .carousel {
+    height: 18rem;
+  }
 }
 
 @media (max-width: 768px) {
