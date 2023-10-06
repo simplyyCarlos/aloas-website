@@ -1,29 +1,31 @@
 <template>
     <div>
-        <Dialog v-model:visible="localShowCreateAccountPopUp" header="Création de compte" modal >
+        <Dialog v-model:visible="localShowCreateAccountPopUp" header="Création de compte" modal>
             <form @submit.prevent="handleSubmit">
-                <div class="p-field">
-                    <label for="firstName">Prénom</label>
-                    <InputText id="firstName" v-model="formData.firstName" required />
-                </div>
-                <div class="p-field">
-                    <label for="lastName">Nom</label>
-                    <InputText id="lastName" v-model="formData.lastName" required />
-                </div>
-                <div class="p-field">
-                    <label for="email">Adresse e-mail</label>
-                    <InputText id="email" v-model="formData.email" type="email" required />
-                </div>
-                <div class="p-field">
-                    <label for="password">Mot de passe</label>
-                    <Password id="password" v-model="formData.password" required />
-                </div>
-                <div class="p-field">
-                    <label for="confirmPassword">Confirmation du mot de passe</label>
-                    <Password id="confirmPassword" v-model="formData.confirmPassword" required />
-                </div>
-                <div class="p-field">
-                    <Button type="submit" label="Créer le compte" />
+                <div class="p-fluid">
+                    <div class="p-field">
+                        <label for="firstName">Prénom</label>
+                        <InputText id="firstName" v-model="formData.firstName" required />
+                    </div>
+                    <div class="p-field">
+                        <label for="lastName">Nom</label>
+                        <InputText id="lastName" v-model="formData.lastName" required />
+                    </div>
+                    <div class="p-field">
+                        <label for="email">Adresse e-mail</label>
+                        <InputText id="email" v-model="formData.email" type="email" required />
+                    </div>
+                    <div class="p-field">
+                        <label for="password">Mot de passe</label>
+                        <Password id="password" v-model="formData.password" required />
+                    </div>
+                    <div class="p-field">
+                        <label for="confirmPassword">Confirmation du mot de passe</label>
+                        <Password id="confirmPassword" v-model="formData.confirmPassword" required />
+                    </div>
+                    <div class="p-field">
+                        <Button type="submit" label="Créer le compte" />
+                    </div>
                 </div>
             </form>
         </Dialog>
@@ -33,7 +35,7 @@
 <script>
 import axios from 'axios';
 import { showError, showWarn } from '../toastService';
-import {mapState, mapActions, mapMutations} from 'vuex';
+import { mapState, mapActions, mapMutations } from 'vuex';
 export default {
     data() {
         return {

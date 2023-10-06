@@ -9,7 +9,7 @@ $sql = "SELECT articles.*, types_articles.libelle, utilisateurs.nom, utilisateur
         LEFT JOIN types_articles ON articles.type_article = types_articles.id
         LEFT JOIN utilisateurs ON articles.auteur = utilisateurs.id 
         ORDER BY articles.date_de_parution DESC
-        LIMIT 5";
+        LIMIT 6";
 
 
 $result = mysqli_query($con, $sql);
