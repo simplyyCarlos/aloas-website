@@ -17,12 +17,35 @@
   </div>
   <div class="sport-activities">
     <h1>Liste des activités sportives</h1>
-    <ul>
-      <li v-for="activity in activities" :key="activity.id">
-        <h2>{{ activity.title }}</h2>
-        <p class="activity-description">{{ activity.description }}</p>
+    <ul class="activity-list">
+      <li v-for="sports in sports" :key="sports.id">
+        <div class="activity-container">
+          <div class="activity-image">
+            <img src="src/assets/img/articles/articles.jpg" alt="Sport Image">
+          </div>
+          <div class="description">
+            <h2>{{ sports.title }}</h2>
+            <h3 class="activity-date">{{ sports.date }}</h3>
+            <p class="activity-description">{{ sports.description }}</p>
+          </div>
+        </div>
       </li>
     </ul>
+    <h1>Liste des activités culturelle</h1>
+      <ul class="activity-list">
+        <li v-for="activites in activites" :key="activites.id">
+          <div class="activity-container">
+            <div class="activity-image">
+              <img src="src/assets/img/articles/articles.jpg" alt="Activitie Image">
+            </div>
+            <div class="description">
+              <h2>{{ activites.title }}</h2>
+              <h3 class="activity-date">{{ activites.date }}</h3>
+              <p class="activity-description">{{ activites.description }}</p>
+            </div>
+          </div>
+        </li>
+      </ul>
   </div>
   <Footer></Footer>
 </template>
@@ -81,28 +104,53 @@ const resetAutoScroll = () => {
 </script>
   
 <script>
-  export default {
+export default {
   data() {
     return {
-      activities: [
+      sports: [
         {
           id: 1,
           title: "Football",
-          description: "Le football est un sport collectif qui se joue avec un ballon sphérique..."
+          date: "Lundi et Vendredi",
+          description: "cras tincidunt lobortis feugiat vivamus at augue eget arcu dictum varius duis at consectetur lorem donec massa sapien faucibus et molestie ac feugiat sed lectus vestibulum mattis ullamcorper velit sed ullamcorper morbi tincidunt ornare massa eget egestas purus viverra accumsan in nisl nisi scelerisque eu ultrices vitae auctor eu augue ut lectus arcu bibendum at varius vel pharetra vel turpis nunc eget lorem dolor sed viverra ipsum nunc aliquet bibendum enim facilisis gravida neque convallis a cras semper auctor neque vitae tempus quam pellentesque nec nam aliquam sem et tortor consequat id porta nibh venenatis cras sed felis eget velit"
         },
         {
           id: 2,
           title: "Basketball",
-          description: "Le basketball est un sport d'équipe qui se joue avec un ballon et deux paniers..."
+          date: "Lundi et Vendredi",
+          description: "cras tincidunt lobortis feugiat vivamus at augue eget arcu dictum varius duis at consectetur lorem donec massa sapien faucibus et molestie ac feugiat sed lectus vestibulum mattis ullamcorper velit sed ullamcorper morbi tincidunt ornare massa eget egestas purus viverra accumsan in nisl nisi scelerisque eu ultrices vitae auctor eu augue ut lectus arcu bibendum at varius vel pharetra vel turpis nunc eget lorem dolor sed viverra ipsum nunc aliquet bibendum enim facilisis gravida neque convallis a cras semper auctor neque vitae tempus quam pellentesque nec nam aliquam sem et tortor consequat id porta nibh venenatis cras sed felis eget velit"
         },
         {
           id: 3,
           title: "Natation",
-          description: "La natation est une activité sportive qui consiste à se déplacer dans l'eau en utilisant..."
+          date: "Lundi et Vendredi",
+          description: "cras tincidunt lobortis feugiat vivamus at augue eget arcu dictum varius duis at consectetur lorem donec massa sapien faucibus et molestie ac feugiat sed lectus vestibulum mattis ullamcorper velit sed ullamcorper morbi tincidunt ornare massa eget egestas purus viverra accumsan in nisl nisi scelerisque eu ultrices vitae auctor eu augue ut lectus arcu bibendum at varius vel pharetra vel turpis nunc eget lorem dolor sed viverra ipsum nunc aliquet bibendum enim facilisis gravida neque convallis a cras semper auctor neque vitae tempus quam pellentesque nec nam aliquam sem et tortor consequat id porta nibh venenatis cras sed felis eget velit"
         },
         // Ajoutez d'autres activités sportives ici
       ],
-      
+
+      activites: [
+        {
+          id: 1,
+          title: "Photo",
+          date: "Lundi et Vendredi",
+          description: "cras tincidunt lobortis feugiat vivamus at augue eget arcu dictum varius duis at consectetur lorem donec massa sapien faucibus et molestie ac feugiat sed lectus vestibulum mattis ullamcorper velit sed ullamcorper morbi tincidunt ornare massa eget egestas purus viverra accumsan in nisl nisi scelerisque eu ultrices vitae auctor eu augue ut lectus arcu bibendum at varius vel pharetra vel turpis nunc eget lorem dolor sed viverra ipsum nunc aliquet bibendum enim facilisis gravida neque convallis a cras semper auctor neque vitae tempus quam pellentesque nec nam aliquam sem et tortor consequat id porta nibh venenatis cras sed felis eget velit"
+        },
+        {
+          id: 2,
+          title: "Théâtre",
+          date: "Lundi et Vendredi",
+          description: "cras tincidunt lobortis feugiat vivamus at augue eget arcu dictum varius duis at consectetur lorem donec massa sapien faucibus et molestie ac feugiat sed lectus vestibulum mattis ullamcorper velit sed ullamcorper morbi tincidunt ornare massa eget egestas purus viverra accumsan in nisl nisi scelerisque eu ultrices vitae auctor eu augue ut lectus arcu bibendum at varius vel pharetra vel turpis nunc eget lorem dolor sed viverra ipsum nunc aliquet bibendum enim facilisis gravida neque convallis a cras semper auctor neque vitae tempus quam pellentesque nec nam aliquam sem et tortor consequat id porta nibh venenatis cras sed felis eget velit"
+        },
+        {
+          id: 3,
+          title: "Dessin",
+          date: "Lundi et Vendredi",
+          description: "cras tincidunt lobortis feugiat vivamus at augue eget arcu dictum varius duis at consectetur lorem donec massa sapien faucibus et molestie ac feugiat sed lectus vestibulum mattis ullamcorper velit sed ullamcorper morbi tincidunt ornare massa eget egestas purus viverra accumsan in nisl nisi scelerisque eu ultrices vitae auctor eu augue ut lectus arcu bibendum at varius vel pharetra vel turpis nunc eget lorem dolor sed viverra ipsum nunc aliquet bibendum enim facilisis gravida neque convallis a cras semper auctor neque vitae tempus quam pellentesque nec nam aliquam sem et tortor consequat id porta nibh venenatis cras sed felis eget velit"
+        },
+        // Ajoutez d'autres activités sportives ici
+      ],
+
     };
   },
   components: {
@@ -112,7 +160,6 @@ const resetAutoScroll = () => {
 </script>
 
 <style scoped>
-
 .carousel {
   position: relative;
   overflow: hidden;
@@ -164,8 +211,31 @@ const resetAutoScroll = () => {
 .control-button i {
   font-size: 24px;
 }
+
 .sport-activities {
   margin: 20px;
+}
+
+.activity-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.activity-container {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  /* Adjust the column width as needed */
+  column-gap: 10px;
+  /* Adjust the gap between columns as needed */
+  align-items: center;
+  /* Vertically center items */
+  padding: 20px;
+}
+
+.activity-image img {
+  max-width: 100%;
+  height: auto;
 }
 
 h1 {
@@ -185,6 +255,13 @@ li {
 h2 {
   font-size: 18px;
   margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+h3 {
+  font-size: 16px;
+  margin-bottom: 5px;
+  font-weight: 200;
 }
 
 p {
@@ -193,6 +270,15 @@ p {
   background-color: #f0f0f0;
   padding: 10px;
   border-radius: 10px;
+  text-align: justify;
+  max-height: 200px; /* Adjust this value to your desired maximum height */
+  overflow-y: auto;
+}
+
+@media screen and (max-width: 768px) {
+  .activity-container {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
   
