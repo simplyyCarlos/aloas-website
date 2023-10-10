@@ -255,6 +255,7 @@ li {
 h2 {
   font-size: 18px;
   margin-bottom: 5px;
+  margin-top: 5px;
 }
 
 h3 {
@@ -272,6 +273,12 @@ p {
   text-align: justify;
   max-height: 200px; /* Adjust this value to your desired maximum height */
   overflow-y: auto;
+}
+
+@media screen and (max-width: 768px) {
+  .activity-container {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
   
