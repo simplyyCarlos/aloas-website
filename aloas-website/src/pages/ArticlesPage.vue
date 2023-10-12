@@ -8,13 +8,18 @@
       <Dropdown :options="categories" v-model="selectedCategory" optionLabel="libelle" />
       <AddArticlePopup v-if="isAddArticleModalOpen" @close="closeAddArticleModal" @articleAdded="articleAdded" />
     </div>
-    <div class="article-list">
-      <div v-for="article in filteredArticles" :key="article.id" class="article-item">
-        <img src="../assets/img/articles/articles.jpg" alt="Article" class="article-image" />
-        <!-- Replace with your actual article image -->
-        <h2 class="article-title">{{ article.titre }}</h2>
-        <p class="article-category">Catégorie: {{ article.libelle }}</p>
-        <p class="article-content">Auteur : {{ article.nom }} {{ article.prenom }}</p>
+    <div class="article-list-container">
+      <div v-if="filteredArticles.length === 0">
+        <p class="no-article-message">Aucun article trouvé</p>
+      </div>
+      <div class="article-list" v-else>
+        <div v-for="article in filteredArticles" :key="article.id" class="article-item">
+          <img src="../assets/img/articles/articles.jpg" alt="Article" class="article-image" />
+          <!-- Replace with your actual article image -->
+          <h2 class="article-title">{{ article.titre }}</h2>
+          <p class="article-category">Catégorie: {{ article.libelle }}</p>
+          <p class="article-content">Auteur : {{ article.nom }} {{ article.prenom }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -50,17 +55,17 @@ export default {
     }
   },
   methods: {
-    async getAllArticles(){
+    async getAllArticles() {
       axios.get('http://localhost:8080/src/api/articlesApi.php').then((response) => {
         this.articles = response.data;
       }).catch((error) => {
         console.log(error);
       });
     },
-    getAllCategories(){
+    getAllCategories() {
       axios.get('http://localhost:8080/src/api/categoriesApi.php').then((response) => {
         this.categories = response.data;
-        this.categories.unshift({libelle: 'Toutes les categories'});
+        this.categories.unshift({ libelle: 'Toutes les categories' });
       }).catch((error) => {
         console.log(error);
       });
@@ -122,15 +127,27 @@ export default {
   border-radius: 4px;
 }
 
+.article-list-container {
+  max-height: 400px; /* Set a fixed maximum height */
+  overflow-y: auto; /* Add a vertical scrollbar when content exceeds the height */
+}
+
 .article-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   grid-gap: 20px;
+  max-height: 400px;
+  /* Set the maximum height here */
+  overflow-y: auto;
+  /* Add a vertical scrollbar when content exceeds the height */
 }
 
 .article-item {
   background-color: #f0f0f0;
   padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 0 5px #ccc;
+  max-width: 250px;
 }
 
 .article-title {
@@ -152,4 +169,11 @@ export default {
   width: 100%;
   height: auto;
 }
+
+.no-article-message {
+  font-size: 18px;
+  text-align: center;
+  margin-top: 20px;
+}
 </style>
+
