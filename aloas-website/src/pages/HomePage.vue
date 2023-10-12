@@ -236,7 +236,9 @@ export default {
 .article-item {
   background-color: #f0f0f0;
   padding: 10px;
-  border-radius: 2%;
+  border-radius: 4px;
+  box-shadow: 0 0 5px #ccc;
+  max-width: 250px;
 }
 
 .article-image {
