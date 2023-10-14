@@ -41,7 +41,7 @@ export default {
       <li class="nav-item"><router-link to="/articles" class="router-link">Articles</router-link></li>
       <li class="nav-item"><router-link to="/activities" class="router-link">Activités</router-link></li>
       <li class="nav-item"><router-link to="/planning" class="router-link">Planning</router-link></li>
-      <li class="nav-item">À propos</li>
+      <li class="nav-item"><router-link to="/about" class="router-link">À propos</router-link></li>
       <li class="nav-item">Nous contacter</li>
     </ul>
     <div class="sign-in">
