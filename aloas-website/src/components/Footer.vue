@@ -2,16 +2,16 @@
     <footer class="footer">
       <div class="footer-content">
         <div class="footer-left">
-          <p>&copy; 2023 Your Website. All rights reserved.</p>
-          <p>Contact Information: info@yourwebsite.com</p>
+          <p>&copy; 2023 Aloas, Tout droits réservés.</p>
+          <p>Information de contact : example@mail.com</p>
         </div>
         <div class="footer-right">
-          <h3>Contact Us</h3>
+          <h3>Contactez nous :</h3>
           <form @submit.prevent="sendQuestion">
-            <input type="text" v-model="name" placeholder="Your Name" required />
-            <input type="email" v-model="email" placeholder="Your Email" required />
-            <textarea v-model="question" placeholder="Your Question" required></textarea>
-            <button type="submit">Send</button>
+            <input type="text" v-model="name" placeholder="Votre Nom" required />
+            <input type="email" v-model="email" placeholder="Votre Email" required />
+            <textarea v-model="question" placeholder="Votre Question" required></textarea>
+            <button type="submit">Envoyer</button>
           </form>
         </div>
       </div>

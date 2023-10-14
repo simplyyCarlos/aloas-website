@@ -1,20 +1,20 @@
 <template>
   <div>
-    <Button label="Add Article" icon="pi pi-plus" class="add-article-button" @click="showAddArticleModal">Add Article</Button>
+    <Button label="Add Article" icon="pi pi-plus" class="add-article-button" @click="showAddArticleModal">Ajouter Article</Button>
     <Dialog v-model:visible="isAddArticleModalOpen" :modal="true" :closable="false" :draggable="false" :resizable="false" :style="{ width: '400px' }">
-      <h2 class="dialog-title">Add Article</h2>
+      <h2 class="dialog-title">Ajouter Article</h2>
       <form @submit.prevent="addArticle">
         <div class="p-fluid">
           <div class="p-field">
-            <label for="title">Title:</label>
+            <label for="title">Titre:</label>
             <InputText id="title" v-model="newArticle.title" required />
           </div>
           <div class="p-field">
-            <label for="category">Category:</label>
+            <label for="category">Catégorie:</label>
             <Dropdown :options="categories" v-model="selectedCategory" optionLabel="libelle" @change="onCategoryChange" />
           </div>
           <div class="p-field">
-            <label for="content">Content:</label>
+            <label for="content">Contenu:</label>
             <Textarea id="content" v-model="newArticle.content" required />
           </div>
         </div>

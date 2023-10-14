@@ -9,15 +9,15 @@
                 </div>
                 <div class="textbox">
                     <font-awesome-icon :icon="['fas', 'user']" />
-                    <input type="text" placeholder="email" v-model="email" required>
+                    <input type="text" placeholder="Email" v-model="email" required>
                 </div>
 
                 <div class="textbox">
                     <font-awesome-icon :icon="['fas', 'lock']" />
-                    <input type="password" placeholder="password" v-model="password" required>
+                    <input type="password" placeholder="Mot de passe" v-model="password" required>
                 </div>
 
-                <button class="btn" type="submit"> Sign In</button>
+                <button class="btn" type="submit">Connexion</button>
             </form>
             <a @click="actionToggleCreateAccountPopUp()" class="create-account">Pas encore inscrit ? Crée un compte</a>
         </div>
