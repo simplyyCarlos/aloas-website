@@ -6,7 +6,9 @@
     <div class="filters">
       <InputText id="title" v-model="searchQuery" placeholder="Rechercher un article" class="search-input" required />
       <Dropdown :options="categories" v-model="selectedCategory" optionLabel="libelle" />
-      <AddArticlePopup v-if="isAddArticleModalOpen" @close="closeAddArticleModal" @articleAdded="articleAdded" />
+      <div v-if="isAuthenticated">
+        <AddArticlePopup v-if="isAddArticleModalOpen" @close="closeAddArticleModal" @articleAdded="articleAdded" />
+      </div>
     </div>
     <div class="article-list-container">
       <div v-if="filteredArticles.length === 0">
@@ -32,6 +34,7 @@ import AddArticlePopup from '../components/AddArticlePopup.vue';
 import Footer from '../components/Footer.vue';
 import LoginPopup from '../components/LoginPopup.vue';
 import axios from 'axios';
+import {mapState, mapActions} from 'vuex';
 
 export default {
   data() {
@@ -52,7 +55,8 @@ export default {
           article.titre.toLowerCase().includes(this.searchQuery.toLowerCase()) &&
           (this.selectedCategory.libelle === 'Toutes les categories' || article.libelle === this.selectedCategory.libelle)
       );
-    }
+    },
+    ...mapState(["isAuthenticated","user"]),
   },
   methods: {
     async getAllArticles() {
