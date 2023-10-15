@@ -1,5 +1,5 @@
 <template>
-  <NavBar/>
+  <NavBar />
   <div class="carousel">
     <div class="carousel-slides" :style="{ transform: `translateX(-${slideIndex * slideWidth}px)` }">
       <div class="carousel-slide" v-for="(slide, index) in slides" :key="index">
@@ -32,20 +32,20 @@
       </li>
     </ul>
     <h1>Liste des activités culturelle</h1>
-      <ul class="activity-list">
-        <li v-for="activites in activites" :key="activites.id">
-          <div class="activity-container">
-            <div class="activity-image">
-              <img src="src/assets/img/articles/articles.jpg" alt="Activitie Image">
-            </div>
-            <div class="description">
-              <h2>{{ activites.title }}</h2>
-              <h3 class="activity-date">{{ activites.date }}</h3>
-              <p class="activity-description">{{ activites.description }}</p>
-            </div>
+    <ul class="activity-list">
+      <li v-for="activites in activites" :key="activites.id">
+        <div class="activity-container">
+          <div class="activity-image">
+            <img src="src/assets/img/articles/articles.jpg" alt="Activitie Image">
           </div>
-        </li>
-      </ul>
+          <div class="description">
+            <h2>{{ activites.title }}</h2>
+            <h3 class="activity-date">{{ activites.date }}</h3>
+            <p class="activity-description">{{ activites.description }}</p>
+          </div>
+        </div>
+      </li>
+    </ul>
   </div>
   <Footer></Footer>
 </template>
@@ -231,6 +231,16 @@ export default {
   align-items: center;
   /* Vertically center items */
   padding: 20px;
+
+  background-color: #f5f5f5;
+  /* Fond gris clair */
+  padding: 20px;
+  margin: 20px;
+  border-radius: 10px;
+  /* Arrondi */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  /* Ombre */
+  text-align: center;
 }
 
 .activity-image img {
@@ -241,6 +251,15 @@ export default {
 h1 {
   font-size: 24px;
   margin-bottom: 10px;
+  background-color: #f5f5f5;
+  /* Fond gris clair */
+  padding: 20px;
+  margin: 20px;
+  border-radius: 10px;
+  /* Arrondi */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  /* Ombre */
+  text-align: center;
 }
 
 ul {
@@ -267,11 +286,12 @@ h3 {
 p {
   font-size: 16px;
   margin-bottom: 0;
-  background-color: #f0f0f0;
+  background-color: #d4d4d4;
   padding: 10px;
   border-radius: 10px;
   text-align: justify;
-  max-height: 200px; /* Adjust this value to your desired maximum height */
+  max-height: 200px;
+  /* Adjust this value to your desired maximum height */
   overflow-y: auto;
 }
 
@@ -279,6 +299,5 @@ p {
   .activity-container {
     grid-template-columns: 1fr;
   }
-}
-</style>
+}</style>
   

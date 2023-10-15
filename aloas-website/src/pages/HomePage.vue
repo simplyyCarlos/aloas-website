@@ -246,10 +246,6 @@ export default {
   height: auto;
 }
 
-.article-content {
-  padding: 10px;
-}
-
 .article-title {
   margin: 0;
 }
@@ -277,20 +273,19 @@ export default {
   margin-bottom: 10px;
 }
 
+/* Responsive styles for screens smaller than 1050px */
 @media (max-width: 1050px) {
   .carousel {
     height: 18rem;
   }
 }
 
+/* Responsive styles for screens smaller than 768px */
 @media (max-width: 768px) {
   .container {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(1, minmax(0, 1fr));
     justify-items: center;
     align-items: center;
-    display: flex;
-    flex-direction: column;
-    row-gap: 10px;
   }
 
   .recent-articles {
@@ -303,6 +298,22 @@ export default {
     margin-left: auto;
     margin-right: auto;
     width: 80%;
+  }
+
+  .control-button {
+    padding: 5px;
+    font-size: 20px; /* Reduce button icon size for smaller screens */
+  }
+
+  .article-list {
+    display: flex; /* Use flex layout */
+    flex-direction: column; /* Display articles in a column */
+    align-items: center; /* Center articles horizontally */
+  }
+
+  .article-item {
+    font-size: 12px; /* Reduce article font size for smaller screens */
+    margin-bottom: 20px; /* Add some margin between articles */
   }
 }
 </style>

@@ -34,12 +34,12 @@ import AddArticlePopup from '../components/AddArticlePopup.vue';
 import Footer from '../components/Footer.vue';
 import LoginPopup from '../components/LoginPopup.vue';
 import axios from 'axios';
-import {mapState, mapActions} from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   data() {
     return {
-      showLoginPopup : false,
+      showLoginPopup: false,
       isAddArticleModalOpen: true,
       searchQuery: '',
       selectedCategory: { libelle: 'Toutes les categories' },
@@ -49,30 +49,35 @@ export default {
   },
   computed: {
     filteredArticles() {
-      console.log(this.articles);
       return this.articles.filter(
         (article) =>
           article.titre.toLowerCase().includes(this.searchQuery.toLowerCase()) &&
           (this.selectedCategory.libelle === 'Toutes les categories' || article.libelle === this.selectedCategory.libelle)
       );
     },
-    ...mapState(["isAuthenticated","user"]),
+    ...mapState(["isAuthenticated", "user"]),
   },
   methods: {
     async getAllArticles() {
-      axios.get('http://localhost:8080/src/api/articlesApi.php').then((response) => {
-        this.articles = response.data;
-      }).catch((error) => {
-        console.log(error);
-      });
+      axios
+        .get('http://localhost:8080/src/api/articlesApi.php')
+        .then((response) => {
+          this.articles = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     getAllCategories() {
-      axios.get('http://localhost:8080/src/api/categoriesApi.php').then((response) => {
-        this.categories = response.data;
-        this.categories.unshift({ libelle: 'Toutes les categories' });
-      }).catch((error) => {
-        console.log(error);
-      });
+      axios
+        .get('http://localhost:8080/src/api/categoriesApi.php')
+        .then((response) => {
+          this.categories = response.data;
+          this.categories.unshift({ libelle: 'Toutes les categories' });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     showAddArticleModal() {
       this.isAddArticleModalOpen = true;
@@ -84,8 +89,8 @@ export default {
       await this.getAllArticles();
       this.showAddArticleModal();
     },
-    toggleLoginPopup () {
-        this.showLoginPopup = !this.showLoginPopup;
+    toggleLoginPopup() {
+      this.showLoginPopup = !this.showLoginPopup;
     },
   },
   components: {
@@ -97,43 +102,67 @@ export default {
   created() {
     this.getAllCategories();
     this.getAllArticles();
-  }
+  },
 };
 </script>
 
 <style scoped>
 .article-page {
   margin: 20px;
+  padding: 0 10px;
 }
 
 .page-title {
   font-size: 24px;
   margin-bottom: 10px;
+  text-align: center;
+  background-color: #f5f5f5;
+  /* Fond gris clair */
+  padding: 20px;
+  margin: 20px;
+  border-radius: 10px;
+  /* Arrondi */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  /* Ombre */
+  text-align: center;
 }
 
 .filters {
   display: flex;
+  flex-direction: column;
   align-items: center;
   margin-bottom: 10px;
+  background-color: #f5f5f5;
+  /* Fond gris clair */
+  padding: 20px;
+  margin: 20px;
+  border-radius: 10px;
+  /* Arrondi */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  /* Ombre */
+  text-align: center;
 }
 
 .search-input {
-  margin-right: 10px;
+  margin-bottom: 10px;
   padding: 8px;
-  width: 300px;
+  width: 100%;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
 .category-select {
   padding: 8px;
+  width: 100%;
   border: 1px solid #ccc;
   border-radius: 4px;
+  margin-bottom: 10px;
 }
 
 .article-list-container {
-  max-height: 400px; /* Set a fixed maximum height */
-  overflow-y: auto; /* Add a vertical scrollbar when content exceeds the height */
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 0 10px;
 }
 
 .article-list {
@@ -141,9 +170,7 @@ export default {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   grid-gap: 20px;
   max-height: 400px;
-  /* Set the maximum height here */
   overflow-y: auto;
-  /* Add a vertical scrollbar when content exceeds the height */
 }
 
 .article-item {
@@ -152,6 +179,7 @@ export default {
   border-radius: 4px;
   box-shadow: 0 0 5px #ccc;
   max-width: 250px;
+  width: 100%;
 }
 
 .article-title {
@@ -179,5 +207,34 @@ export default {
   text-align: center;
   margin-top: 20px;
 }
-</style>
 
+@media screen and (max-width: 768px) {
+  .article-list {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+  .article-list-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 10px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .filters {
+    width: 100%;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+
+  .category-select {
+    width: 100%;
+  }
+
+  .article-item {
+    max-width: 100%;
+  }
+}</style>

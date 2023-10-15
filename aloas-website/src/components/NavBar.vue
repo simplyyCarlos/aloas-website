@@ -195,7 +195,7 @@ span {
 
   .navbar ul {
     display: none;
-    width: 100%;
+    width: 106%;
     background-color: rgb(36, 163, 36);
     padding: 10px;
     margin-top: 10px;
