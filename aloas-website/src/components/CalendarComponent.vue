@@ -1,6 +1,6 @@
 <template>
   <div class="calendar">
-    <FullCalendar ref="calendar" :options="calendarOptions" />
+      <FullCalendar ref="calendar" :options="calendarOptions" />
   </div>
 </template>
 
@@ -10,11 +10,12 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import frLocale from '@fullcalendar/core/locales/fr'
 import timeGridPlugin from '@fullcalendar/timegrid'
-import { mapState } from 'vuex';
+import { mapState,mapActions } from 'vuex';
 
 export default {
   computed: {
-    ...mapState(["user"]),
+    ...mapState(["user","events"]),
+    
     dynamicHeaderToolbar() {
       if (this.user.is_admin) {
         return {
@@ -26,10 +27,48 @@ export default {
         return {
           left: 'prev,next today',
           center: 'title',
-          right: 'dayGridMonth'
+          right: 'timeGridWeek,dayGridMonth'
         };
       }
     },
+    calendarEvents() {
+      
+      const mappedEvents = [];
+      this.events.forEach(event => {
+        const baseEvent = {
+          id: event.id, // Unique identifier for the event
+          title: event.eventName,
+          start: event.eventStartDate,
+          end: event.eventEndDate,
+          allDay: event.eventIsAllDay === 1,
+          extendedProps: {
+            location: event.eventLocation,
+            description: event.eventDescription,
+          },
+        };
+
+        if (event.eventIsRepeatedWeekly) {
+          // Handle recurring events by adding multiple instances
+          const startDate = new Date(event.eventStartDate);
+          const endDate = new Date(event.eventEndDate);
+
+          while (startDate <= endDate) {
+            mappedEvents.push({
+              ...baseEvent,
+              start: new Date(startDate),
+              end: new Date(startDate),
+            });
+
+            startDate.setDate(startDate.getDate() + 7); // Add 7 days for weekly recurrence
+          }
+        } else {
+          // Non-recurring event
+          mappedEvents.push(baseEvent);
+        }
+    });
+
+    return mappedEvents;
+  },
   },
   watch: {
     dynamicHeaderToolbar: {
@@ -44,7 +83,21 @@ export default {
           }
         });
       },
-      immediate: true, 
+      immediate: true,
+    },
+    calendarEvents: {
+      handler(newEvents) {
+        this.$nextTick(() => {
+          if (this.$refs.calendar) {
+            this.calendarOptions.events = newEvents;
+            const calendarApi = this.$refs.calendar.getApi();
+            if (calendarApi) {
+              calendarApi.setOption('events', newEvents);
+            }
+          }
+        });
+      },
+      immediate: true,
     },
   },
   components: {
@@ -60,7 +113,6 @@ export default {
         allDaySlot: false,
         dateClick: this.handleDateClick,
         eventClick: this.handleEventClick,
-        events: [],
         customButtons: {
           addEventButton: {
             text: 'Ajouter un événement',
@@ -69,6 +121,7 @@ export default {
             }
           }
         },
+        events : this.calendarEvents,
         headerToolbar: this.dynamicHeaderToolbar,
         buttonText: {
           today: 'Aujourd\'hui',
@@ -84,9 +137,22 @@ export default {
       },
     }
   },
-  methods: {
-    // Your methods here
-  }
+  methods:{
+    ...mapActions(['fetchEvents']),
+    async fetchEventsFromApi(){
+      try{
+        await this.fetchEvents();
+        
+      }catch(error){
+        console.error(error);
+      }
+      
+     
+    },
+  },
+  mounted() {
+    this.fetchEventsFromApi();
+  },
 }
 </script>
 

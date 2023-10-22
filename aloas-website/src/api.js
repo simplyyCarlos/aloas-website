@@ -25,3 +25,40 @@ export const loginUser = async (email, password) => {
 };
 
 // Other API-related functions can be added here
+
+export const addEvent = async (eventName, eventStartDate, eventEndDate, eventIsAllDay, eventIsRepeatedWeekly, eventLocation, eventDescription) => {
+  try {
+    const response = await axios.post(`${apiUrl}addEventApi.php`, {
+      eventName,
+      eventStartDate,
+      eventEndDate,
+      eventIsAllDay,
+      eventIsRepeatedWeekly,
+      eventLocation,
+      eventDescription,
+    });
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error('Failed to add the event');
+    }
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+export const getEvents = async () => {
+  try {
+    const response = await axios.get(`${apiUrl}getEventsApi.php`);
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error('Failed to get events');
+    }
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

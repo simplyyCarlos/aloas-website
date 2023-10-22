@@ -1,64 +1,98 @@
-<script >
-export default {
-};
-</script>
-
 <template>
-    <div class="blur-overlay">
-        <main class="popup">
-        <div class="event-form">
-          <div class="close-popup" @click="this.$emit('toggle-add-event-popup')">
-              <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
+  <div class="blur-overlay">
+    <main class="popup">
+      <div class="event-form">
+        <div class="close-popup" @click="$emit('toggle-add-event-popup')">
+          <font-awesome-icon :icon="['fas', 'times']" size="xl" />
+        </div>
+        <h2 class="form-title">Ajouter un événement au calendrier</h2>
+        <form @submit.prevent="handleCreateEvent()" class="flex-form">
+          <div class="form-group">
+            <label for="eventName" class="input-label">Nom de l'événement:</label>
+            <input type="text" id="eventName" required class="input-field" v-model="eventData.eventName" />
           </div>
-          <h2 class="form-title"> Ajouter un événement au calendrier</h2>
-          <form @submit.prevent="createEvent()" class="flex-form">
+          <div class="date-time-group">
             <div class="form-group">
-              <label for="eventName" class="input-label">Nom de l'événement:</label>
-              <input type="text" id="eventName" required class="input-field" />
-            </div>
-            <div class="date-time-group">
-              <div class="form-group">
-                <label for="eventStartDate" class="input-label">Date de l'événement:</label>
-                <input type="datetime-local" id="eventStartDate" required class="input-field" />
-              </div>
-              <div class="form-group">
-                <label for="eventEndDate" class="input-label">Date de fin :</label>
-                <input type="datetime-local" id="eventEndDate" required class="input-field" />
-              </div>
-            </div>
-            <div class="checkbox-group">
-              <div class="form-group">
-                <label for="isAllDay" class="checkbox-label">Toute la journée:</label>
-                <input type="checkbox" id="isAllDay" class="checkbox-field" />
-              </div>
-              <div class="form-group">
-                <label for="isRepeatedWeekly" class="checkbox-label">Répété chaque semaine:</label>
-                <input type="checkbox" id="isRepeatedWeekly" class="checkbox-field" />
-              </div>
-            </div>
-            <div class="date-time-group">
-              <div class="form-group">
-                <label for="eventStartTime" class="input-label">Heure de début:</label>
-                <input type="time" id="eventStartTime" class="input-field" />
-              </div>
-              <div class="form-group">
-                <label for="eventStopTime" class="input-label">Heure de fin:</label>
-                <input type="time" id="eventStopTime" class="input-field" />
-              </div>
+              <label for="eventStartDate" class="input-label">Date de l'événement:</label>
+              <input type="datetime-local" id="eventStartDate" required class="input-field" v-model="eventData.eventStartDate" />
             </div>
             <div class="form-group">
-              <label for="eventDescription" class="input-label">Description de l'événement:</label>
-              <textarea id="eventDescription" class="textarea-field"></textarea>
+              <label for="eventEndDate" class="input-label">Date de fin:</label>
+              <input type="datetime-local" id="eventEndDate" required class="input-field" v-model="eventData.eventEndDate" />
             </div>
-            <div class="button-container">
-              <button type="submit">Ajouter</button>
+          </div>
+          <div class="checkbox-group">
+            <div class="form-group">
+              <label for="isAllDay" class="checkbox-label">Toute la journée:</label>
+              <input type="checkbox" id="isAllDay" class="checkbox-field" v-model="eventData.eventIsAllDay" />
             </div>
-          </form>
+            <div class="form-group">
+              <label for="isRepeatedWeekly" class="checkbox-label">Répété chaque semaine:</label>
+              <input type="checkbox" id="isRepeatedWeekly" class="checkbox-field" v-model="eventData.eventIsRepeatedWeekly" />
             </div>
-        </main>
-    </div>
-    
+          </div>
+          <div class="form-group">
+            <label for="eventLocation" class="input-label">Lieu de l'événement:</label>
+            <select id="eventLocation" class="input-field" v-model="eventData.eventLocation">
+              <option value="cosec_favier">COSEC Favier</option>
+              <option value="dojo_montagnat">Dojo Montagnat</option>
+              <option value="ceyzeriat_petanque">Ceyzériat - Pétanque</option>
+              <option value="adapei">ADAPEI</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="eventDescription" class="input-label">Description de l'événement:</label>
+            <textarea id="eventDescription" class="textarea-field" v-model="eventData.eventDescription"></textarea>
+          </div>
+          <div class="button-container">
+            <button type="submit">Ajouter</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
 </template>
+
+<script>
+import { mapActions } from 'vuex';
+export default {
+  data() {
+    return {
+      eventData: {
+        eventName: '',
+        eventStartDate: '',
+        eventEndDate: '',
+        eventIsAllDay: false,
+        eventIsRepeatedWeekly: false,
+        eventLocation: 'location1',
+        eventDescription: '',
+      },
+    };
+  },
+  methods: {
+    ...mapActions(['createEvent', 'fetchEvents']),
+    async handleCreateEvent (){
+      try{
+        await this.createEvent(this.eventData);
+        await this.fetchEvents();
+        this.resetForm();
+        this.$emit('toggle-add-event-popup');
+      }catch(error){
+        console.error(error);
+      }
+    },
+    resetForm(){
+        this.eventData.eventName= '';
+        this.eventData.eventStartDate= '';
+        this.eventData.eventEndDate= '';
+        this.eventData.eventIsAllDay= false;
+        this.eventData.eventIsRepeatedWeekly= false;
+        this.eventData.eventLocation= 'location1';
+        this.eventData.eventDescription= '';
+    },
+  },
+}
+</script>
 
 <style scoped>
     .blur-overlay {
@@ -209,5 +243,20 @@ export default {
         transform: scale(1.1);
         box-shadow: 0 2px 8px rgba (0, 0, 0, 0.3);
     }
+
+    select.input-field {
+    padding: 10px;
+    border: 1px solid #4caf50;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    width: 100%;
+  }
+
+  select.input-field:focus {
+    outline: none;
+    border-color: #4caf50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+  }
 
 </style>
