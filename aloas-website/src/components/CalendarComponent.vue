@@ -107,7 +107,7 @@ export default {
     return {
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-        initialView: 'dayGridMonth',
+        initialView: 'timeGridWeek',
         contentHeight: 'auto',
         locale: frLocale,
         allDaySlot: false,
