@@ -1,19 +1,105 @@
 <template>
   <div class="calendar">
-    <FullCalendar ref ="calendar" :options="calendarOptions" />
-    <div class="divider"></div>
+      <FullCalendar ref="calendar" :options="calendarOptions" />
   </div>
 </template>
 
 <script>
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
-import interactionPlugin from '@fullcalendar/interaction' // needed for dayClick
+import interactionPlugin from '@fullcalendar/interaction'
 import frLocale from '@fullcalendar/core/locales/fr'
 import timeGridPlugin from '@fullcalendar/timegrid'
-import {mapState, mapActions} from 'vuex';
+import { mapState,mapActions } from 'vuex';
 
 export default {
+  computed: {
+    ...mapState(["user","events"]),
+    
+    dynamicHeaderToolbar() {
+      if (this.user.is_admin) {
+        return {
+          left: 'prev,next today addEventButton',
+          center: 'title',
+          right: 'timeGridWeek,dayGridMonth'
+        };
+      } else {
+        return {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'timeGridWeek,dayGridMonth'
+        };
+      }
+    },
+    calendarEvents() {
+      
+      const mappedEvents = [];
+      this.events.forEach(event => {
+        const baseEvent = {
+          id: event.id, // Unique identifier for the event
+          title: event.eventName,
+          start: event.eventStartDate,
+          end: event.eventEndDate,
+          allDay: event.eventIsAllDay === 1,
+          extendedProps: {
+            location: event.eventLocation,
+            description: event.eventDescription,
+          },
+        };
+
+        if (event.eventIsRepeatedWeekly) {
+          // Handle recurring events by adding multiple instances
+          const startDate = new Date(event.eventStartDate);
+          const endDate = new Date(event.eventEndDate);
+
+          while (startDate <= endDate) {
+            mappedEvents.push({
+              ...baseEvent,
+              start: new Date(startDate),
+              end: new Date(startDate),
+            });
+
+            startDate.setDate(startDate.getDate() + 7); // Add 7 days for weekly recurrence
+          }
+        } else {
+          // Non-recurring event
+          mappedEvents.push(baseEvent);
+        }
+    });
+
+    return mappedEvents;
+  },
+  },
+  watch: {
+    dynamicHeaderToolbar: {
+      handler(newToolbar) {
+        this.$nextTick(() => {
+          if (this.$refs.calendar) {
+            this.calendarOptions.headerToolbar = newToolbar;
+            const calendarApi = this.$refs.calendar.getApi();
+            if (calendarApi) {
+              calendarApi.setOption('headerToolbar', newToolbar);
+            }
+          }
+        });
+      },
+      immediate: true,
+    },
+    calendarEvents: {
+      handler(newEvents) {
+        this.$nextTick(() => {
+          if (this.$refs.calendar) {
+            this.calendarOptions.events = newEvents;
+            const calendarApi = this.$refs.calendar.getApi();
+            if (calendarApi) {
+              calendarApi.setOption('events', newEvents);
+            }
+          }
+        });
+      },
+      immediate: true,
+    },
+  },
   components: {
     FullCalendar
   },
@@ -21,56 +107,66 @@ export default {
     return {
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-        initialView: 'dayGridMonth',
+        initialView: 'timeGridWeek',
         contentHeight: 'auto',
         locale: frLocale,
-        allDaySlot: false, // Remove "All-day" box
-        dateClick : this.handleDateClick,
+        allDaySlot: false,
+        dateClick: this.handleDateClick,
         eventClick: this.handleEventClick,
-        events: [
-          { title: 'event 1', start: '2023-09-01T08:00:00', end: '2023-09-01T10:00:00' },
-          { title: 'event 2', start: '2023-09-01T10:00:00', end: '2023-09-01T14:00:00' }, // Event with specific times
-
-        ],
-        headerToolbar: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'timeGridWeek,dayGridMonth'
+        customButtons: {
+          addEventButton: {
+            text: 'Ajouter un événement',
+            click : () => {
+              this.$emit('toggle-add-event-popup')
+            }
+          }
         },
+        events : this.calendarEvents,
+        headerToolbar: this.dynamicHeaderToolbar,
         buttonText: {
           today: 'Aujourd\'hui',
           month: 'Mois',
           week: 'Semaine',
-          next : '>',
-          prev : '<'
+          next: '>',
+          prev: '<'
         },
         slotMinTime: '08:00:00',
         slotMaxTime: '22:00:00',
         slotDuration: '0:30:00',
         selectable: true,
       },
-     
     }
   },
-  methods: {
-    handleDateClick : function (arg) {
+  methods:{
+    ...mapActions(['fetchEvents']),
+    async fetchEventsFromApi(){
+      try{
+        await this.fetchEvents();
+        
+      }catch(error){
+        console.error(error);
+      }
       
+     
     },
-    handleEventClick : function (info){
-      if(info.jsEvent.button === 0) {
-        console.log("ok")
-        const confirmation = window.confirm(`Voulez vous supprimez ${info.event.title} ?`);
-        if(confirmation) {
-          info.event.remove();
-          alert("L'évenement à été supprimmé !");
-        }
-      }
-      else if(info.view.type === 'dayGridMonth'){
-        this.$refs.calendar.getApi().changeView('timeGridWeek','2023-09-01');
-      }
-    }
-  }
+  },
+  mounted() {
+    this.fetchEventsFromApi();
+  },
 }
 </script>
 
-
+<style scoped>
+/* Styles for the calendar component */
+.calendar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  margin: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.419);
+}
+</style>

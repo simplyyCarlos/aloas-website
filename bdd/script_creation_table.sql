@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS evenements;
 DROP TABLE IF EXISTS utilisateurs; 
 DROP TABLE IF EXISTS types_articles; 
 DROP TABLE IF EXISTS disciplines; 
+DROP TABLE IF EXISTS lieu; 
 
 
 CREATE TABLE utilisateurs (
@@ -38,9 +39,15 @@ CREATE TABLE evenements (
     titre VARCHAR(255) NOT NULL,
     discipline INT NOT NULL,
     createur INT NOT NULL,
+    lieu varchar(255) NOT NULL,
     date_creation DATE NOT NULL,
     date_debut_evenement DATETIME NOT NULL,
     date_fin_evenement DATETIME NOT NULL,
     FOREIGN KEY (discipline) REFERENCES disciplines(id),
     FOREIGN KEY (createur) REFERENCES utilisateurs(id)
+);
+
+CREATE TABLE lieu (
+    name varchar(255) PRIMARY KEY not NULL,
+    address varchar(255)
 );

@@ -1,15 +1,51 @@
-<script setup>
+<script >
 import CalendarComponent from '../components/CalendarComponent.vue';
 import NavBar from '../components/NavBar.vue';
+import { mapState } from 'vuex';
+import AddEventPopup from '../components/AddEventPopup.vue';
+
+export default {
+    computed : {
+      ...mapState(["isAuthenticated","user"]),
+    },
+    components: {
+        CalendarComponent,
+        NavBar,
+        AddEventPopup,
+    },
+    methods :{
+      toggleAddEventPopup(){
+        this.showAddEventPopup = !this.showAddEventPopup;
+      }
+    },
+    data(){
+      return {
+        showAddEventPopup : false
+      }
+    }
+};
 </script>
 
 <template>
-    <NavBar/>
-    <main class="calendar">
-        <CalendarComponent></CalendarComponent>
-    </main>
-</template>
-
-<style>
- 
+    <div class="calendar">
+      <NavBar />
+      <AddEventPopup @toggle-add-event-popup="toggleAddEventPopup" v-if="showAddEventPopup"/>
+      <CalendarComponent @toggle-add-event-popup="toggleAddEventPopup"></CalendarComponent>
+      
+    </div>
+  </template>
+  
+<style scoped>
+  /* Add styles for the event form */
+  .calendar {
+    display: flex;
+    flex-direction: column;
+    
+  }
+  
+  
 </style>
+  
+
+  
+  

@@ -4,30 +4,33 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
 header("Access-Control-Allow-Methods: *");
 session_start();
-// ... (existing code to establish database connection)
 
 // Check if the request method is POST
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Get the article data from the request body
+    // Get the article data from the request body and validate it
     $data = json_decode(file_get_contents("php://input"), true);
 
-    // Sanitize and validate the data (if needed)
+    // Validate the data before using it in SQL query
+    $title = isset($data["title"]) ? mysqli_real_escape_string($con, $data["title"]) : "";
+    $category = isset($data["category"]) ? intval($data["category"]) : 0; // Ensure it's an integer
+    $content = isset($data["content"]) ? mysqli_real_escape_string($con, $data["content"]) : "";
 
-    // Insert the article data into the database
-    $title = mysqli_real_escape_string($con, $data["title"]);
-    $category = mysqli_real_escape_string($con, $data["category"]);
-    $content = mysqli_real_escape_string($con, $data["content"]);
-    $date = date("Y-m-d");
-
-    $sql = "INSERT INTO articles (titre, auteur, date_de_parution, type_article, contenu) VALUES ('$title', 1 , '$date', 1 , '$content')";
-
-    if (mysqli_query($con, $sql)) {
-        // Return a success message (optional)
-        echo json_encode(["message" => "Article added successfully"]);
+    // Check if required fields are present
+    if (empty($title) || empty($category) || empty($content)) {
+        echo json_encode(["error" => "Incomplete data provided"]);
     } else {
-        // Return an error message (optional)
-        echo json_encode(["error" => "Failed to add the article"]);
+        // Prepare and execute the SQL query
+        $date = date("Y-m-d");
+        $sql = "INSERT INTO articles (titre, auteur, date_de_parution, type_article, contenu) VALUES ('$title', 1, '$date', $category, '$content')";
+
+        if (mysqli_query($con, $sql)) {
+            echo json_encode(["message" => "Article added successfully"]);
+        } else {
+            echo json_encode(["error" => "Failed to add the article"]);
+        }
     }
+} else {
+    echo json_encode(["error" => "Invalid request method"]);
 }
 
 mysqli_close($con);

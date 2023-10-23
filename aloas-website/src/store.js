@@ -1,11 +1,13 @@
 import { createStore } from 'vuex';
 import axios from 'axios';
 import { showSucess, showError } from './toastService';
+import { loginUser, addEvent,getEvents } from './api'; 
 
 export default createStore({
   state: {
     isAuthenticated: false,
     user: {},
+    events:[],
     showCreateAccountPopUp: false,
   },
   mutations: {
@@ -18,37 +20,52 @@ export default createStore({
       showSucess('Vous êtes déconnecté');
       state.user = {};
     },
+    setEvents(state, events) {
+      state.events = events;
+    },
     mutationToggleCreateAccountPopUp(state) {
       state.showCreateAccountPopUp = !state.showCreateAccountPopUp;
       console.log(state.showCreateAccountPopUp);
     },
   },
   actions: {
-    async login({ commit }, { email, password }) {
+    async fetchEvents({ commit }) {
       try {
-        const response = await axios.get('http://localhost:8080/src/api/userApi.php', {
-          params: {
-            email,
-            password,
-          },
-        });
-
-        if (response.status === 200) {
-          const userData = response.data;
-          showSucess(`Bienvenue ${userData.prenom} ${userData.nom} !`);
-          commit('loginUser', userData);
-        } else if (response.status === 201) {
-          showError('Email ou mot de passe incorrect');
-          throw new Error('Email ou mot de passe incorrect');
-        } else {
-          showError('Une erreur est survenue');
-          throw new Error('Une erreur est survenue');
-        }
+        const events = await getEvents(); // Call the getEvents function from 'api.js'
+        commit('setEvents', events); // Update the state with the retrieved events
       } catch (error) {
         console.error(error);
-        throw error; // Rethrow the error to be caught by the component
+        throw error;
       }
     },
+    async login({ commit }, { email, password }) {
+      try {
+        const userData = await loginUser(email, password);
+        commit('loginUser', userData);
+        showSucess(`Bienvenue ${userData.prenom} ${userData.nom} !`);
+      } catch (error) {
+        console.error(error);
+        showError('Email ou mot de passe incorrect');
+        throw error; 
+      }
+    },
+    async createEvent({ commit }, eventData) {
+      try {
+        const response = await addEvent(
+          eventData.eventName,
+          eventData.eventStartDate,
+          eventData.eventEndDate,
+          eventData.eventIsAllDay,
+          eventData.eventIsRepeatedWeekly,
+          eventData.eventLocation,
+          eventData.eventDescription
+        );
+        return response;
+        } catch (error) {
+        console.error(error);
+        throw error; 
+      }
+    }, 
     logout({ commit }) {
       commit('logoutUser');
     },
