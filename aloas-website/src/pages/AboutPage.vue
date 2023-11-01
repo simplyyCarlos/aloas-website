@@ -3,43 +3,6 @@
     <div class="title-box">
       <h1>À propos de ALOAS</h1>
     </div>
-    <div class="about-page">
-      <div class="about-sections">
-        <div class="about-section">
-          <h2>Qui nous sommes</h2>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sit
-            amet purus in odio consequat tincidunt.
-          </p>
-          <img src="../assets/img/articles/articles.jpg" alt="ImageSection" class="section-image" />
-        </div>
-        <div class="about-section">
-          <h2>Où nous agissons</h2>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sit
-            amet purus in odio consequat tincidunt.
-          </p>
-          <img src="../assets/img/articles/articles.jpg" alt="ImageSection" class="section-image" />
-        </div>
-        <div class="about-section">
-          <h2>Pour qui</h2>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sit
-            amet purus in odio consequat tincidunt.
-          </p>
-          <img src="../assets/img/articles/articles.jpg" alt="ImageSection" class="section-image" />
-        </div>
-        <div class="about-section">
-          <h2>Quand</h2>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam sit
-            amet purus in odio consequat tincidunt.
-          </p>
-          <img src="../assets/img/articles/articles.jpg" alt="ImageSection" class="section-image" />
-        </div>
-      </div>
-    </div>
-    <Footer />
   </template>
   
   <script>

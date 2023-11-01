@@ -13,8 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // log in console end and start date 
     $eventStartDate = isset($data["eventStartDate"]) ? mysqli_real_escape_string($con, $data["eventStartDate"]) : "";
     $eventEndDate = isset($data["eventEndDate"]) ? mysqli_real_escape_string($con, $data["eventEndDate"]) : "";
-    error_log($eventStartDate);
-    error_log($eventEndDate);
+    
 
     // create a hardcoded dates for testing
 

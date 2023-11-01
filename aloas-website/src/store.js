@@ -1,7 +1,7 @@
 import { createStore } from 'vuex';
 import axios from 'axios';
 import { showSucess, showError } from './toastService';
-import { loginUser, addEvent,getEvents } from './api'; 
+import { loginUser, addEvent,getEvents,deleteEvent } from './api'; 
 
 export default createStore({
   state: {
@@ -34,6 +34,14 @@ export default createStore({
         const events = await getEvents(); // Call the getEvents function from 'api.js'
         commit('setEvents', events); // Update the state with the retrieved events
       } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    },
+    async deleteEvent({ commit }, eventId) {
+      try{
+        await deleteEvent(eventId);
+      }catch(error){
         console.error(error);
         throw error;
       }

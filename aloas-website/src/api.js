@@ -62,3 +62,20 @@ export const getEvents = async () => {
     throw error;
   }
 };
+
+export const deleteEvent = async (eventId) => {
+  try{
+    const response = await axios.post(`${apiUrl}deleteEventApi.php`, {
+      eventId,
+    });
+    
+    if(response.status ===200){
+      return response.data;
+    }else{
+      throw new Error('Failed to delete the event');
+    }
+  }catch(error){
+    console.error(error);
+    throw error;
+  }
+}

@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue';
 import Footer from '../components/Footer.vue';
 import NavBar from '../components/NavBar.vue';
 import LoginPopup from '../components/LoginPopup.vue';
+import { mapState,mapActions } from 'vuex';
 
 const slides = [
   'src/assets/img/carousel/image1.png',
@@ -74,21 +75,21 @@ const resetAutoScroll = () => {
     <div class="recent-articles">
       <h2 class="section-title">Articles récents</h2>
       <div class="article-list">
-        <div v-for="article in articles" :key="article.id" class="article-item">
-          <img src="../assets/img/articles/articles.jpg" alt="Article" class="article-image" />
-          <!-- Replace with your actual article image -->
-          <h2 class="article-title">{{ article.titre }}</h2>
-          <p class="article-category">Catégorie: {{ article.libelle }}</p>
-          <p class="article-content">Auteur : {{ article.nom }} {{ article.prenom }}</p>
-        </div>
+        
       </div>
     </div>
     <aside class="recent-events">
-      <h2 class="section-title">Événements récents</h2>
+      <h2 class="section-title">Événements à venir</h2>
       <ul class="event-list">
-        <li v-for="event in events" :key="event.id" class="event-item">
-          {{ event.title }}
-        </li>
+        <li v-for="(event) in nextEvents">
+        <div class="card">
+          <div class="card-header">{{ event.title }}</div>
+          <div class="card-body">
+            <p>{{ handleDate(event.start,event.end) }}</p>
+            <p>{{ handleLocation(event.location) }}</p>
+          </div>
+        </div>
+      </li>
       </ul>
     </aside>
   </main>
@@ -104,7 +105,99 @@ export default {
     };
   },
   components: { LoginPopup },
+  computed: {
+      ...mapState(["events"]),
+      
+      nextEvents() {
+        const nextEvents = [];
+        this.events.forEach(event => {
+          const baseEvent = {
+            title: event.eventName,
+            start: event.eventStartDate,
+            end: event.eventEndDate,
+            location: event.eventLocation,
+            description: event.eventDescription,
+          };
+          nextEvents.push(baseEvent);
+      });
+      return nextEvents;
+    }
+  },
   methods: {
+    ...mapActions(['fetchEvents']),
+    async fetchEventsFromApi(){
+      try{
+        await this.fetchEvents();
+        console.log(this.nextEvents)
+      }catch(error){
+        console.error(error);
+      }
+    },
+    handleLocation(location) {
+     switch(location){
+      case "cosec_favier":
+        return "Cosec Favier";
+      case "dojo_montagnat":
+        return "Dojo de Montagnat";
+      case "ceyzeriat_petanque":
+        return "Terrain de pétanque Ceyzériat"; 
+      case "adapei":
+        return "ADAPEI";
+     }
+    },
+    handleDate(dateStart, dateEnd) {
+    const convertedStartDate = new Date(dateStart);
+    const convertedEndDate = new Date(dateEnd);
+
+    const weekdays = [
+      "Dimanche",
+      "Lundi",
+      "Mardi",
+      "Mercredi",
+      "Jeudi",
+      "Vendredi",
+      "Samedi",
+    ];
+
+    const months = [
+      "janvier",
+      "février",
+      "mars",
+      "avril",
+      "mai",
+      "juin",
+      "juillet",
+      "août",
+      "septembre",
+      "octobre",
+      "novembre",
+      "décembre",
+    ];
+
+    const startDay = weekdays[convertedStartDate.getDay()];
+    const startDayNumber = convertedStartDate.getDate();
+    const startMonth = months[convertedStartDate.getMonth()];
+    const startTime = convertedStartDate.toLocaleTimeString("fr-FR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    const endDay = weekdays[convertedEndDate.getDay()];
+    const endDayNumber = convertedEndDate.getDate();
+    const endMonth = months[convertedEndDate.getMonth()];
+    const endTime = convertedEndDate.toLocaleTimeString("fr-FR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    if (startDay === endDay && startDayNumber === endDayNumber && startMonth === endMonth) {
+      // If the end date is the same day as the start date
+      return `${startDay} ${startDayNumber} ${startMonth} à ${startTime}h jusqu'à ${endTime}h`;
+    } else {
+      // If the end date is a different day
+      return `${startDay} ${startDayNumber} ${startMonth} à ${startTime}h jusqu'au ${endDay} ${endDayNumber} ${endMonth}${endTime}h`;
+    }
+  },
     toggleLoginPopup() {
       this.showLoginPopup = !this.showLoginPopup;
     },
@@ -118,6 +211,11 @@ export default {
   },
   created() {
     this.getAllArticles();
+  },
+  mounted() {
+    this.fetchEventsFromApi();
+    console.log(this)
+    
   },
 };
 </script>
@@ -271,10 +369,16 @@ export default {
   margin: 0;
   list-style: none;
 }
-
-.event-item {
-  margin-bottom: 10px;
+.card {
+  background-color: rgb(95, 197, 95);
+  border-radius: 10prgb(70, 70, 228);
+  padding: 20px;
+  margin-bottom: 20px;
+  color : white;
+  border-radius: 8px;
+  box-shadow: 0 0 5px #ccc;
 }
+
 
 /* Responsive styles for screens smaller than 1050px */
 @media (max-width: 1050px) {

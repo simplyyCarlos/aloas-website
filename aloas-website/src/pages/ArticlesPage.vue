@@ -2,7 +2,7 @@
   <NavBar :showLoginPopup="showLoginPopup" @toggle-login-popup="toggleLoginPopup" />
   <LoginPopup :showLoginPopup="showLoginPopup" @toggle-login-popup="toggleLoginPopup" v-if="showLoginPopup" />
   <div class="article-page">
-    <h1 class="page-title">Articles</h1>
+    <h1 class="page-title">Actualités</h1>
     <div class="filters">
       <InputText id="title" v-model="searchQuery" placeholder="Rechercher un article" class="search-input" required />
       <Dropdown :options="categories" v-model="selectedCategory" optionLabel="libelle" />
@@ -25,7 +25,7 @@
       </div>
     </div>
   </div>
-  <Footer />
+  
 </template>
 
 <script>

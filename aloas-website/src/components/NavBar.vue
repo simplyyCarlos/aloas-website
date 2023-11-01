@@ -42,7 +42,7 @@ export default {
       <li class="nav-item"><router-link to="/activities" class="router-link">Activités</router-link></li>
       <li class="nav-item"><router-link to="/planning" class="router-link">Planning</router-link></li>
       <li class="nav-item"><router-link to="/about" class="router-link">À propos</router-link></li>
-      <li class="nav-item">Nous contacter</li>
+      <li class="nav-item"><router-link to="/contact" class="router-link">Nous Contacter</router-link></li>
     </ul>
     <div class="sign-in">
       <template v-if="isAuthenticated">
@@ -64,6 +64,7 @@ export default {
   background-color: rgb(95, 197, 95);
   height: 100px;
   width: 100%;
+  border-bottom: 1px solid black;
   display: flex;
   align-items: center;
   padding: 0 20px;

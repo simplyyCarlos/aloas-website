@@ -138,20 +138,34 @@ export default {
     }
   },
   methods:{
-    ...mapActions(['fetchEvents']),
+    ...mapActions(['fetchEvents','deleteEvent']),
     async fetchEventsFromApi(){
       try{
         await this.fetchEvents();
+        console.log(this.events);
         
       }catch(error){
         console.error(error);
       }
-      
-     
     },
+    async HandleOutdatedEvents() {
+      for (const event of this.events) {
+        const endDate = new Date(event.eventEndDate);
+        const today = new Date();
+        if (endDate < today) {
+          try {
+            await this.deleteEvent(event.id);
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      }
+    },
+
   },
   mounted() {
     this.fetchEventsFromApi();
+    this.HandleOutdatedEvents();
   },
 }
 </script>
