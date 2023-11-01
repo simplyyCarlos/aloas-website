@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Dialog v-model:visible="localShowCreateAccountPopUp" header="Création de compte" modal>
+        <Dialog v-model:visible="localShowCreateAccountPopUp" class="title" header="Création de compte" modal>
             <form @submit.prevent="handleSubmit">
                 <div class="p-fluid">
                     <div class="p-field">
@@ -24,18 +24,19 @@
                         <Password id="confirmPassword" v-model="formData.confirmPassword" required />
                     </div>
                     <div class="p-field">
-                        <Button type="submit" label="Créer le compte" />
+                        <Button type="submit" label="Créer le compte"/>
                     </div>
                 </div>
             </form>
         </Dialog>
     </div>
 </template>
-  
+
 <script>
 import axios from 'axios';
 import { showError, showWarn } from '../toastService';
 import { mapState, mapActions, mapMutations } from 'vuex';
+
 export default {
     data() {
         return {
@@ -77,14 +78,11 @@ export default {
                     console.log(response);
                     if (response.status == 200) {
                         this.$emit('create-account-sucess');
-                    }
-                    else if (response.status == 201) {
+                    } else if (response.status == 201) {
                         showWarn('Adresse e-mail déjà utilisée');
-                    }
-                    else if (response.status == 202) {
+                    } else if (response.status == 202) {
                         showError('Impossible de créer le compte');
-                    }
-                    else {
+                    } else {
                         showError('Une erreur est survenue');
                     }
                 }
@@ -103,8 +101,34 @@ export default {
     },
 };
 </script>
-  
+
 <style scoped>
-/* Ajoutez vos styles CSS ici */
+/* Apply the same styles used in the second code */
+/* Styles for the dialog and form container */
+.p-dialog {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.419);
+}
+
+/* Styles for form fields */
+.p-field {
+    margin-bottom: 20px;
+}
+
+/* Styles for labels */
+.p-field label {
+    font-weight: bold;
+}
+
+/* Styles for the submit button */
+
+
+/* Add more styles as needed */
 </style>
-  
