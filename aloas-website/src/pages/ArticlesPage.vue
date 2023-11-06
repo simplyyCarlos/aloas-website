@@ -1,205 +1,174 @@
 <template>
-  <NavBar :showLoginPopup="showLoginPopup" @toggle-login-popup="toggleLoginPopup" />
-  <LoginPopup :showLoginPopup="showLoginPopup" @toggle-login-popup="toggleLoginPopup" v-if="showLoginPopup" />
-  <div class="article-page">
-    <h1 class="page-title">Actualités</h1>
-    <div class="filters">
-      <InputText id="title" v-model="searchQuery" placeholder="Rechercher un article" class="search-input" required />
-      <Dropdown :options="categories" v-model="selectedCategory" optionLabel="libelle" />
-      <div v-if="isAuthenticated">
-        <AddArticlePopup v-if="isAddArticleModalOpen" @close="closeAddArticleModal" @articleAdded="articleAdded" />
+  <NavBar />
+  <div class="utility-bar">
+    <div class="group-search">
+      <label for="search-input" class="search-label">Rechercher un article :</label>
+      <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Rechercher" class="search-input" />
+
       </div>
     </div>
+    <div class="group-filter">
+      <label for="filter-select" class="filter-label">Filtrer par :</label>
+      <div class="filter-dropdown">
+        <select id="filter-select">
+          <option value="all">Adapei</option>
+          <option value="news">Aloas</option>
+          <option value="events">Aroma</option>
+        </select>
+      </div>
+    </div>
+    
+  </div>
+  <div class="article-page">
     <div class="article-list-container">
-      <div v-if="filteredArticles.length === 0">
-        <p class="no-article-message">Aucun article trouvé</p>
+      <div class="article-list">
+        <Article v-for="index in 40" :key="index" />
       </div>
-      <div class="article-list" v-else>
-        <div v-for="article in filteredArticles" :key="article.id" class="article-item">
-          <img src="../assets/img/articles/articles.jpg" alt="Article" class="article-image" />
-          <!-- Replace with your actual article image -->
-          <h2 class="article-title">{{ article.titre }}</h2>
-          <p class="article-category">Catégorie: {{ article.libelle }}</p>
-          <p class="article-content">Auteur : {{ article.nom }} {{ article.prenom }}</p>
-        </div>
-      </div>
+      <p class="no-article-message">No articles found.</p>
     </div>
   </div>
-  
 </template>
 
 <script>
 import NavBar from '../components/NavBar.vue';
-import AddArticlePopup from '../components/AddArticlePopup.vue';
-import Footer from '../components/Footer.vue';
-import LoginPopup from '../components/LoginPopup.vue';
-import axios from 'axios';
-import { mapState, mapActions } from 'vuex';
+import Article from '../components/Article.vue';
 
 export default {
+  components: {
+    NavBar,
+    Article,
+  },
   data() {
     return {
       showLoginPopup: false,
-      isAddArticleModalOpen: true,
-      searchQuery: '',
-      selectedCategory: { libelle: 'Toutes les categories' },
-      articles: [],
-      categories: [], // Replace with your actual categories
     };
   },
-  computed: {
-    filteredArticles() {
-      return this.articles.filter(
-        (article) =>
-          article.titre.toLowerCase().includes(this.searchQuery.toLowerCase()) &&
-          (this.selectedCategory.libelle === 'Toutes les categories' || article.libelle === this.selectedCategory.libelle)
-      );
-    },
-    ...mapState(["isAuthenticated", "user"]),
-  },
   methods: {
-    async getAllArticles() {
-      axios
-        .get('http://localhost:8080/src/api/articlesApi.php')
-        .then((response) => {
-          this.articles = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    getAllCategories() {
-      axios
-        .get('http://localhost:8080/src/api/categoriesApi.php')
-        .then((response) => {
-          this.categories = response.data;
-          this.categories.unshift({ libelle: 'Toutes les categories' });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    showAddArticleModal() {
-      this.isAddArticleModalOpen = true;
-    },
-    closeAddArticleModal() {
-      this.isAddArticleModalOpen = false;
-    },
-    async articleAdded() {
-      await this.getAllArticles();
-      this.showAddArticleModal();
-    },
     toggleLoginPopup() {
       this.showLoginPopup = !this.showLoginPopup;
     },
-  },
-  components: {
-    NavBar,
-    AddArticlePopup,
-    Footer,
-    LoginPopup,
-  },
-  created() {
-    this.getAllCategories();
-    this.getAllArticles();
   },
 };
 </script>
 
 <style scoped>
+.utility-bar {
+  display: flex;
+  flex-direction: row;
+  height: 50px;
+  margin: 20px;
+  padding: 0 10px;
+  justify-content: space-between;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.419);
+  align-items: center;
+  border-radius: 8px;
+}
+
+.group-search {
+  display: flex;
+  align-items: center;
+}
+
+.group-filter {
+  display: flex;
+  align-items: center;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #f2f2f2;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.search-label {
+  margin-right: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  background-color: transparent;
+  outline: none;
+  font-size: 14px;
+  color: #333;
+}
+
+.search-icon {
+  margin-left: 8px;
+  color: #999;
+  cursor: pointer;
+}
+
+.search-icon:hover {
+  color: #666;
+}
+
+.filter-dropdown {
+  display: flex;
+  align-items: center;
+  background-color: #f2f2f2;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.filter-label {
+  margin-right: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.filter-dropdown select {
+  border: none;
+  background-color: transparent;
+  outline: none;
+  font-size: 14px;
+  color: #333;
+}
+
+.filter-dropdown select option {
+  font-size: 14px;
+  color: #333;
+}
+
+.filter-dropdown select:focus {
+  outline: none;
+}
+
+.filter-dropdown::after {
+  content: '\f078';
+  font-family: 'FontAwesome';
+  font-size: 14px;
+  color: #999;
+  margin-left: 8px;
+}
+
+.filter-dropdown:hover::after {
+  color: #666;
+  cursor: pointer;
+}
+
 .article-page {
   margin: 20px;
   padding: 0 10px;
 }
 
-.page-title {
-  font-size: 24px;
-  margin-bottom: 10px;
-  text-align: center;
-  background-color: #f5f5f5;
-  /* Fond gris clair */
-  padding: 20px;
-  margin: 20px;
-  border-radius: 10px;
-  /* Arrondi */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  /* Ombre */
-  text-align: center;
-}
-
-.filters {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 10px;
-  background-color: #f5f5f5;
-  /* Fond gris clair */
-  padding: 20px;
-  margin: 20px;
-  border-radius: 10px;
-  /* Arrondi */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  /* Ombre */
-  text-align: center;
-}
-
-.search-input {
-  margin-bottom: 10px;
-  padding: 8px;
-  width: 100%;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.category-select {
-  padding: 8px;
-  width: 100%;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-bottom: 10px;
-}
-
 .article-list-container {
-  max-height: 400px;
-  overflow-y: auto;
-  padding: 0 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
 }
 
 .article-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   grid-gap: 20px;
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-.article-item {
-  background-color: #f0f0f0;
-  padding: 10px;
-  border-radius: 4px;
-  box-shadow: 0 0 5px #ccc;
-  max-width: 250px;
   width: 100%;
-}
-
-.article-title {
-  font-size: 18px;
-  margin-bottom: 5px;
-}
-
-.article-category {
-  font-size: 14px;
-  margin-bottom: 5px;
-}
-
-.article-content {
-  font-size: 14px;
-  margin-bottom: 0;
-}
-
-.article-image {
-  width: 100%;
-  height: auto;
 }
 
 .no-article-message {
@@ -208,33 +177,21 @@ export default {
   margin-top: 20px;
 }
 
-@media screen and (max-width: 768px) {
+@media (max-width: 1472px) {
   .article-list {
-    grid-template-columns: repeat(1, minmax(0, 1fr));
+    grid-template-columns: repeat(3, 1fr);
   }
+}
 
-  .article-list-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0 10px;
-    max-width: 1200px;
-    margin: 0 auto;
+@media (max-width: 1125px) {
+  .article-list {
+    grid-template-columns: repeat(2, 1fr);
   }
+}
 
-  .filters {
-    width: 100%;
+@media (max-width: 768px) {
+  .article-list {
+    grid-template-columns: repeat(1, 1fr);
   }
-
-  .search-input {
-    width: 100%;
-  }
-
-  .category-select {
-    width: 100%;
-  }
-
-  .article-item {
-    max-width: 100%;
-  }
-}</style>
+}
+</style>

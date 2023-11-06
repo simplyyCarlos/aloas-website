@@ -73,7 +73,7 @@ const resetAutoScroll = () => {
   </div>
   <main class="container">
     <div class="recent-articles">
-      <h2 class="section-title">Articles récents</h2>
+      <h2 class="section-title">Actualités</h2>
       <div class="article-list">
         <!-- Article list content here -->
       </div>
@@ -135,12 +135,10 @@ export default {
               title: event.eventName,
               start: newStart.toISOString(),
               end: newEnd.toISOString(),
-              allDay: event.eventIsAllDay,
-              extendedProps: {
-                location: event.eventLocation,
-                description: event.eventDescription,
-                eventIsRepeatedWeekly: true,
-              },
+              location: event.eventLocation,
+              description: event.eventDescription,
+              eventIsRepeatedWeekly: true,
+              
             };
             nextEvents.push(recurrEvent);
           }
@@ -387,7 +385,7 @@ export default {
 }
 
 .event-list-wrapper {
-  max-height: 400px; /* Set a fixed maximum height for the container */
+  max-height: 600px; /* Set a fixed maximum height for the container */
   overflow-y: auto; /* Enable vertical scrolling when content overflows */
   padding-right: 10px; /* Add some right padding to avoid content being hidden under the scrollbar */
 }

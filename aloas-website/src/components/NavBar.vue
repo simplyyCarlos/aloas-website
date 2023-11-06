@@ -38,7 +38,7 @@ export default {
     </div>
     <ul :class="{ 'nav-open': isNavOpen }">
       <li class="nav-item"><router-link to="/" class="router-link">Accueil</router-link></li>
-      <li class="nav-item"><router-link to="/articles" class="router-link">Articles</router-link></li>
+      <li class="nav-item"><router-link to="/articles" class="router-link">Actualités</router-link></li>
       <li class="nav-item"><router-link to="/activities" class="router-link">Activités</router-link></li>
       <li class="nav-item"><router-link to="/planning" class="router-link">Planning</router-link></li>
       <li class="nav-item"><router-link to="/about" class="router-link">À propos</router-link></li>
