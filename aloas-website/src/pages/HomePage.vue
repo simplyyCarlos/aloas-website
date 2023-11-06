@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue';
 import Footer from '../components/Footer.vue';
 import NavBar from '../components/NavBar.vue';
 import LoginPopup from '../components/LoginPopup.vue';
-import { mapState,mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 const slides = [
   'src/assets/img/carousel/image1.png',
@@ -75,22 +75,24 @@ const resetAutoScroll = () => {
     <div class="recent-articles">
       <h2 class="section-title">Articles récents</h2>
       <div class="article-list">
-        
+        <!-- Article list content here -->
       </div>
     </div>
     <aside class="recent-events">
       <h2 class="section-title">Événements à venir</h2>
-      <ul class="event-list">
-        <li v-for="(event) in nextEvents">
-        <div class="card">
-          <div class="card-header">{{ event.title }}</div>
-          <div class="card-body">
-            <p>{{ handleDate(event.start,event.end) }}</p>
-            <p>{{ handleLocation(event.location) }}</p>
-          </div>
-        </div>
-      </li>
-      </ul>
+      <div class="event-list-wrapper">
+        <ul class="event-list">
+          <li v-for="(event) in nextEvents">
+            <div class="card">
+              <div class="card-header">{{ event.title }}</div>
+              <div class="card-body">
+                <p>{{ handleDate(event.start, event.end) }}</p>
+                <p>{{ handleLocation(event.location) }}</p>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
     </aside>
   </main>
 </template>
@@ -106,97 +108,121 @@ export default {
   },
   components: { LoginPopup },
   computed: {
-      ...mapState(["events"]),
-      
-      nextEvents() {
-        const nextEvents = [];
-        this.events.forEach(event => {
-          const baseEvent = {
-            title: event.eventName,
-            start: event.eventStartDate,
-            end: event.eventEndDate,
-            location: event.eventLocation,
-            description: event.eventDescription,
-          };
-          nextEvents.push(baseEvent);
+    ...mapState(["events"]),
+    nextEvents() {
+      const nextEvents = [];
+      this.events.forEach(event => {
+        const baseEvent = {
+          title: event.eventName,
+          start: event.eventStartDate,
+          end: event.eventEndDate,
+          location: event.eventLocation,
+          description: event.eventDescription,
+          IsRepeatedWeekly: event.eventIsRepeatedWeekly,
+        };
+        nextEvents.push(baseEvent);
+        if (event.eventIsRepeatedWeekly) {
+          const startDate = new Date(event.eventStartDate);
+          const endDate = new Date(event.eventEndDate);
+          const oneWeek = 7 * 24 * 60 * 60 * 1000; // One week in milliseconds
+
+          for (let i = 1; i <= 52; i++) { // Repeat for one year (52 weeks)
+            const newStart = new Date(startDate.getTime() + i * oneWeek);
+            const newEnd = new Date(endDate.getTime() + i * oneWeek);
+
+            const recurrEvent = {
+              id: `${event.id}-repeated-${i}`,
+              title: event.eventName,
+              start: newStart.toISOString(),
+              end: newEnd.toISOString(),
+              allDay: event.eventIsAllDay,
+              extendedProps: {
+                location: event.eventLocation,
+                description: event.eventDescription,
+                eventIsRepeatedWeekly: true,
+              },
+            };
+            nextEvents.push(recurrEvent);
+          }
+        }
       });
       return nextEvents;
     }
   },
   methods: {
     ...mapActions(['fetchEvents']),
-    async fetchEventsFromApi(){
-      try{
+    async fetchEventsFromApi() {
+      try {
         await this.fetchEvents();
-      }catch(error){
+      } catch (error) {
         console.error(error);
       }
     },
     handleLocation(location) {
-     switch(location){
-      case "cosec_favier":
-        return "Cosec Favier";
-      case "dojo_montagnat":
-        return "Dojo de Montagnat";
-      case "ceyzeriat_petanque":
-        return "Terrain de pétanque Ceyzériat"; 
-      case "adapei":
-        return "ADAPEI";
-     }
+      switch (location) {
+        case "cosec_favier":
+          return "Cosec Favier";
+        case "dojo_montagnat":
+          return "Dojo de Montagnat";
+        case "ceyzeriat_petanque":
+          return "Terrain de pétanque Ceyzériat";
+        case "adapei":
+          return "ADAPEI";
+      }
     },
     handleDate(dateStart, dateEnd) {
-    const convertedStartDate = new Date(dateStart);
-    const convertedEndDate = new Date(dateEnd);
+      const convertedStartDate = new Date(dateStart);
+      const convertedEndDate = new Date(dateEnd);
 
-    const weekdays = [
-      "Dimanche",
-      "Lundi",
-      "Mardi",
-      "Mercredi",
-      "Jeudi",
-      "Vendredi",
-      "Samedi",
-    ];
+      const weekdays = [
+        "Dimanche",
+        "Lundi",
+        "Mardi",
+        "Mercredi",
+        "Jeudi",
+        "Vendredi",
+        "Samedi",
+      ];
 
-    const months = [
-      "janvier",
-      "février",
-      "mars",
-      "avril",
-      "mai",
-      "juin",
-      "juillet",
-      "août",
-      "septembre",
-      "octobre",
-      "novembre",
-      "décembre",
-    ];
+      const months = [
+        "janvier",
+        "février",
+        "mars",
+        "avril",
+        "mai",
+        "juin",
+        "juillet",
+        "août",
+        "septembre",
+        "octobre",
+        "novembre",
+        "décembre",
+      ];
 
-    const startDay = weekdays[convertedStartDate.getDay()];
-    const startDayNumber = convertedStartDate.getDate();
-    const startMonth = months[convertedStartDate.getMonth()];
-    const startTime = convertedStartDate.toLocaleTimeString("fr-FR", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+      const startDay = weekdays[convertedStartDate.getDay()];
+      const startDayNumber = convertedStartDate.getDate();
+      const startMonth = months[convertedStartDate.getMonth()];
+      const startTime = convertedStartDate.toLocaleTimeString("fr-FR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
 
-    const endDay = weekdays[convertedEndDate.getDay()];
-    const endDayNumber = convertedEndDate.getDate();
-    const endMonth = months[convertedEndDate.getMonth()];
-    const endTime = convertedEndDate.toLocaleTimeString("fr-FR", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+      const endDay = weekdays[convertedEndDate.getDay()];
+      const endDayNumber = convertedEndDate.getDate();
+      const endMonth = months[convertedEndDate.getMonth()];
+      const endTime = convertedEndDate.toLocaleTimeString("fr-FR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
 
-    if (startDay === endDay && startDayNumber === endDayNumber && startMonth === endMonth) {
-      // If the end date is the same day as the start date
-      return `${startDay} ${startDayNumber} ${startMonth} à ${startTime}h jusqu'à ${endTime}h`;
-    } else {
-      // If the end date is a different day
-      return `${startDay} ${startDayNumber} ${startMonth} à ${startTime}h jusqu'au ${endDay} ${endDayNumber} ${endMonth}${endTime}h`;
-    }
-  },
+      if (startDay === endDay && startDayNumber === endDayNumber && startMonth === endMonth) {
+        // If the end date is the same day as the start date
+        return `${startDay} ${startDayNumber} ${startMonth} à ${startTime}h jusqu'à ${endTime}h`;
+      } else {
+        // If the end date is a different day
+        return `${startDay} ${startDayNumber} ${startMonth} à ${startTime}h jusqu'au ${endDay} ${endDayNumber} ${endMonth}${endTime}h`;
+      }
+    },
     toggleLoginPopup() {
       this.showLoginPopup = !this.showLoginPopup;
     },
@@ -214,7 +240,6 @@ export default {
   mounted() {
     this.fetchEventsFromApi();
     console.log(this)
-    
   },
 };
 </script>
@@ -295,8 +320,6 @@ export default {
   margin-bottom: 0;
 }
 
-
-
 .container {
   position: relative;
   display: grid;
@@ -304,8 +327,8 @@ export default {
   grid-gap: 50px;
   margin-top: -50px;
   z-index: 2;
-  grid-template-columns: repeat(2, minmax(0, 1fr)); /* Deux colonnes */
-  grid-template-rows: repeat(3, auto); /* Trois lignes automatiques */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(3, auto);
 }
 
 .recent-articles {
@@ -326,8 +349,8 @@ export default {
 
 .article-list {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Deux colonnes */
-  grid-gap: 20px; /* Espacement entre les articles */
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 20px;
   padding: 20px;
 }
 
@@ -360,7 +383,13 @@ export default {
   min-height: 600px;
   height: 700px;
   border-radius: 2%;
-  box-shadow: 0.5px 0.5px 0.5px 1px rgb(0, 0, 0, 0.315);
+  box-shadow: 0.5px 0.5px 0.5px 1px rgba(0, 0, 0, 0.315);
+}
+
+.event-list-wrapper {
+  max-height: 400px; /* Set a fixed maximum height for the container */
+  overflow-y: auto; /* Enable vertical scrolling when content overflows */
+  padding-right: 10px; /* Add some right padding to avoid content being hidden under the scrollbar */
 }
 
 .event-list {
@@ -368,25 +397,23 @@ export default {
   margin: 0;
   list-style: none;
 }
+
 .card {
-  background-color: rgb(95, 197, 95);
-  border-radius: 10prgb(70, 70, 228);
+  background-color: rgba(95, 197, 95, 0.8);
+  border-radius: 10px;
   padding: 20px;
   margin-bottom: 20px;
-  color : white;
+  color: white;
   border-radius: 8px;
   box-shadow: 0 0 5px #ccc;
 }
 
-
-/* Responsive styles for screens smaller than 1050px */
 @media (max-width: 1050px) {
   .carousel {
     height: 18rem;
   }
 }
 
-/* Responsive styles for screens smaller than 768px */
 @media (max-width: 768px) {
   .container {
     grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -408,18 +435,18 @@ export default {
 
   .control-button {
     padding: 5px;
-    font-size: 20px; /* Reduce button icon size for smaller screens */
+    font-size: 20px;
   }
 
   .article-list {
-    display: flex; /* Use flex layout */
-    flex-direction: column; /* Display articles in a column */
-    align-items: center; /* Center articles horizontally */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .article-item {
-    font-size: 12px; /* Reduce article font size for smaller screens */
-    margin-bottom: 20px; /* Add some margin between articles */
+    font-size: 12px;
+    margin-bottom: 20px;
   }
 }
 </style>
