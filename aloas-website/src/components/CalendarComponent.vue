@@ -1,6 +1,6 @@
 <template>
   <div class="calendar">
-      <FullCalendar ref="calendar" :options="calendarOptions" />
+    <FullCalendar ref="calendar" :options="calendarOptions" />
   </div>
 </template>
 
@@ -10,20 +10,27 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import frLocale from '@fullcalendar/core/locales/fr'
 import timeGridPlugin from '@fullcalendar/timegrid'
-import { mapState,mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   computed: {
-    ...mapState(["user","events"]),
-    
+    ...mapState(["user", "events"]),
+
     dynamicHeaderToolbar() {
-      if (this.user.is_admin) {
+      if (this.user.is_admin && this.showDeletionDialog) {
+        return {
+          left: 'prev,next today addEventButton deleteEventButton',
+          center: 'title',
+          right: 'timeGridWeek,dayGridMonth'
+        };
+      }else if(this.user.is_admin){
         return {
           left: 'prev,next today addEventButton',
           center: 'title',
           right: 'timeGridWeek,dayGridMonth'
         };
-      } else {
+      }
+      else {
         return {
           left: 'prev,next today',
           center: 'title',
@@ -32,7 +39,6 @@ export default {
       }
     },
     calendarEvents() {
-      
       const mappedEvents = [];
       this.events.forEach(event => {
         const baseEvent = {
@@ -40,35 +46,43 @@ export default {
           title: event.eventName,
           start: event.eventStartDate,
           end: event.eventEndDate,
-          allDay: event.eventIsAllDay === 1,
+          allDay: event.eventIsAllDay,
           extendedProps: {
             location: event.eventLocation,
             description: event.eventDescription,
+            eventIsRepeatedWeekly: event.eventIsRepeatedWeekly,
           },
         };
+        mappedEvents.push(baseEvent);
 
         if (event.eventIsRepeatedWeekly) {
-          // Handle recurring events by adding multiple instances
           const startDate = new Date(event.eventStartDate);
           const endDate = new Date(event.eventEndDate);
+          const oneWeek = 7 * 24 * 60 * 60 * 1000; // One week in milliseconds
 
-          while (startDate <= endDate) {
-            mappedEvents.push({
-              ...baseEvent,
-              start: new Date(startDate),
-              end: new Date(startDate),
-            });
+          for (let i = 1; i <= 52; i++) { // Repeat for one year (52 weeks)
+            const newStart = new Date(startDate.getTime() + i * oneWeek);
+            const newEnd = new Date(endDate.getTime() + i * oneWeek);
 
-            startDate.setDate(startDate.getDate() + 7); // Add 7 days for weekly recurrence
+            const recurrEvent = {
+              id: `${event.id}-repeated-${i}`,
+              title: event.eventName,
+              start: newStart.toISOString(),
+              end: newEnd.toISOString(),
+              allDay: event.eventIsAllDay,
+              extendedProps: {
+                location: event.eventLocation,
+                description: event.eventDescription,
+                eventIsRepeatedWeekly: true,
+              },
+            };
+            mappedEvents.push(recurrEvent);
           }
-        } else {
-          // Non-recurring event
-          mappedEvents.push(baseEvent);
         }
-    });
+      });
+      return mappedEvents;
+    },
 
-    return mappedEvents;
-  },
   },
   watch: {
     dynamicHeaderToolbar: {
@@ -105,23 +119,30 @@ export default {
   },
   data() {
     return {
+      showDeletionDialog : false,
       calendarOptions: {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
         initialView: 'timeGridWeek',
         contentHeight: 'auto',
         locale: frLocale,
         allDaySlot: false,
-        dateClick: this.handleDateClick,
+        // handle day click 
         eventClick: this.handleEventClick,
         customButtons: {
           addEventButton: {
             text: 'Ajouter un événement',
-            click : () => {
+            click: () => {
               this.$emit('toggle-add-event-popup')
+            }
+          },
+          deleteEventButton: {
+            text: 'Supprimer un événement',
+            click: () => {
+              this.$emit('toggle-delete-event-popup')
             }
           }
         },
-        events : this.calendarEvents,
+        events: this.calendarEvents,
         headerToolbar: this.dynamicHeaderToolbar,
         buttonText: {
           today: 'Aujourd\'hui',
@@ -137,14 +158,14 @@ export default {
       },
     }
   },
-  methods:{
-    ...mapActions(['fetchEvents','deleteEvent']),
-    async fetchEventsFromApi(){
-      try{
+  methods: {
+    ...mapActions(['fetchEvents', 'deleteEvent','setSelectedEvent','createEvent']),
+    ...mapState(['user']),
+    async fetchEventsFromApi() {
+      try {
         await this.fetchEvents();
-        console.log(this.events);
-        
-      }catch(error){
+
+      } catch (error) {
         console.error(error);
       }
     },
@@ -152,16 +173,32 @@ export default {
       for (const event of this.events) {
         const endDate = new Date(event.eventEndDate);
         const today = new Date();
+        if(event.eventIsRepeatedWeekly && endDate < today){
+          const newStart = new Date (event.eventStartDate);
+          const newEnd = new Date (event.eventEndDate);
+          newStart.setDate(newStart.getDate() + 7);
+          newEnd.setDate(newEnd.getDate() + 7);
+          await this.deleteEvent(event.id);
+          await this.createEvent(event.eventName, newStart, newEnd, event.eventIsAllDay, event.eventIsRepeatedWeekly, event.eventLocation, event.eventDescription);
+          await this.fetchEvents();
+        }
         if (endDate < today) {
           try {
             await this.deleteEvent(event.id);
+            await this.fetchEvents();
           } catch (error) {
             console.error(error);
           }
         }
       }
     },
-
+    handleEventClick(event){
+      if(!this.user.is_admin){
+        return;
+      }
+        this.showDeletionDialog = !this.showDeletionDialog;
+        this.setSelectedEvent(event.event);
+    }
   },
   mounted() {
     this.fetchEventsFromApi();

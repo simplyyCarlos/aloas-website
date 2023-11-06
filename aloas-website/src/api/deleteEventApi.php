@@ -8,7 +8,6 @@ session_start();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents("php://input"), true);
     $eventID = isset($data["eventId"]) ? intval($data["eventId"]) : 0;
-    
     if ($eventID > 0) {
         // Perform the event deletion
         $sql = "DELETE FROM events WHERE id = ?";

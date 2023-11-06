@@ -128,7 +128,6 @@ export default {
     async fetchEventsFromApi(){
       try{
         await this.fetchEvents();
-        console.log(this.nextEvents)
       }catch(error){
         console.error(error);
       }

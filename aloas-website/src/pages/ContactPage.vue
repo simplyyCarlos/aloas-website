@@ -53,7 +53,6 @@ import NavBar from '../components/NavBar.vue';
       background-color: white;
       padding: 20px;
       border: 1px solid #ccc;
-      border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.419);
     }
     .contact-form h2 {

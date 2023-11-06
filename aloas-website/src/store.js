@@ -8,6 +8,7 @@ export default createStore({
     isAuthenticated: false,
     user: {},
     events:[],
+    selectedEvent: {},
     showCreateAccountPopUp: false,
   },
   mutations: {
@@ -23,9 +24,12 @@ export default createStore({
     setEvents(state, events) {
       state.events = events;
     },
+    setSelectedEvent(state, event) {
+      state.selectedEvent = event;
+      console.log(state.selectedEvent)
+    },
     mutationToggleCreateAccountPopUp(state) {
       state.showCreateAccountPopUp = !state.showCreateAccountPopUp;
-      console.log(state.showCreateAccountPopUp);
     },
   },
   actions: {
@@ -79,6 +83,9 @@ export default createStore({
     },
     actionToggleCreateAccountPopUp({ commit }) {
       commit('mutationToggleCreateAccountPopUp');
+    },
+    setSelectedEvent({ commit }, event) {
+      commit('setSelectedEvent', event);
     },
   },
 });

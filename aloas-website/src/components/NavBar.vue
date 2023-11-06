@@ -46,7 +46,7 @@ export default {
     </ul>
     <div class="sign-in">
       <template v-if="isAuthenticated">
-        <span>{{ user.nom }} {{ user.prenom }}</span>
+        <span class="username">{{ user.nom }} {{ user.prenom }}</span>
         <i class="fa fa-sign-out" @click="logout()"></i>
       </template>
       <template v-else>
@@ -128,6 +128,9 @@ export default {
 }
 
 .sign-in {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   margin-left: auto;
 }
 
@@ -135,6 +138,9 @@ export default {
   color: white;
   font-size: 1.75rem;
   cursor: pointer;
+}
+.sign-in .username {
+  font-size: 1.75rem;
 }
 
 .router-link {
@@ -158,17 +164,25 @@ span {
   .navbar .nav-item[data-v-c3ceb15a] {
     font-size: 1.15rem;
   }
+
+  
 }
 
 @media (max-width: 1064px) {
   .navbar .nav-item[data-v-c3ceb15a] {
     font-size: 1rem;
   }
+
+  
 }
 
 @media (max-width: 999px) {
   .navbar .nav-item[data-v-c3ceb15a] {
     font-size: 0.7rem;
+  }
+
+  .sign-in .username {
+    font-size: 1rem;
   }
 }
 
@@ -227,6 +241,10 @@ span {
     top: 50px;
     transform: translateY(-50%);
     padding: 20px;
+  }
+
+  .sign-in .username {
+    display : none;
   }
 }
 </style>
