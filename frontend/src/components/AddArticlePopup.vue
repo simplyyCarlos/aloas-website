@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     getAllCategories(){
-      axios.get('http://localhost:8080/src/api/categoriesApi.php').then((response) => {
+      axios.get('http://localhost:8080/api/categoriesApi.php').then((response) => {
         this.categories = response.data;
       }).catch((error) => {
         console.log(error);
@@ -63,7 +63,7 @@ export default {
     },
     addArticle() {
       // Make an HTTP POST request to your PHP API
-      axios.post("http://localhost:8080/src/api/addArticleApi.php", this.newArticle)
+      axios.post("http://localhost:8080/api/addArticleApi.php", this.newArticle)
         .then((response) => {
           // Handle the response if needed (e.g., show a success message)
           console.log("Article added successfully!");

@@ -224,7 +224,7 @@ export default {
       this.showLoginPopup = !this.showLoginPopup;
     },
     async getAllArticles() {
-      axios.get('http://localhost:8080/src/api/articlesLimitApi.php').then((response) => {
+      axios.get('http://localhost:8080/api/articlesLimitApi.php').then((response) => {
         this.articles = response.data;
       }).catch((error) => {
         console.log(error);

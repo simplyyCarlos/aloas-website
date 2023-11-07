@@ -68,7 +68,7 @@ export default {
                 showWarn('Les mots de passe ne correspondent pas');
                 return;
             }
-            axios.post('http://localhost:8080/src/api/createAccountApi.php', {
+            axios.post('http://localhost:8080/api/createAccountApi.php', {
                 prenom: this.formData.firstName,
                 nom: this.formData.lastName,
                 email: this.formData.email,
