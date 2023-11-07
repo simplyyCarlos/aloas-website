@@ -5,9 +5,9 @@ import LoginPopup from '../components/LoginPopup.vue';
 import { mapState, mapActions } from 'vuex';
 
 const slides = [
-  'src/assets/img/carousel/image1.png',
-  'src/assets/img/carousel/image2.jpg',
-  'src/assets/img/carousel/image3.jpg',
+  '/image1.png',
+  '/image2.jpg',
+  '/image3.jpg',
 ];
 
 const slideIndex = ref(0);
