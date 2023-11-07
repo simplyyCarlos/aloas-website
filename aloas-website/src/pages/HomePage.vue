@@ -1,6 +1,5 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import Footer from '../components/Footer.vue';
 import NavBar from '../components/NavBar.vue';
 import LoginPopup from '../components/LoginPopup.vue';
 import { mapState, mapActions } from 'vuex';

@@ -1,5 +1,4 @@
 import { createStore } from 'vuex';
-import axios from 'axios';
 import { showSucess, showError } from './toastService';
 import { loginUser, addEvent,getEvents,deleteEvent } from './api'; 
 

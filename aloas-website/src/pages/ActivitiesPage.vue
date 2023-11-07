@@ -3,7 +3,7 @@
   <main class="activities-container">
     <div class="activity-card">
       <div class="card-img">
-        <img src="src/assets/img/activities/judo.jpeg" alt="Judo" class="activity-image">
+        <img src="../assets/img/activities/judo.jpeg" alt="Judo" class="activity-image">
       </div>
       <div class="activity-details">
         <div class="main-infos">
@@ -18,7 +18,7 @@
     </div>
     <div class="activity-card">
       <div class="card-img">
-        <img src="src/assets/img/activities/photographie.jpg" alt="Photographie" class="activity-image">
+        <img src="../assets/img/activities/photographie.jpg" alt="Photographie" class="activity-image">
       </div>
       <div class="activity-details">
         <div class="main-infos">
@@ -33,7 +33,7 @@
     </div>
     <div class="activity-card">
       <div class="card-img">
-        <img src="src/assets/img/activities/multisport.jpeg" alt="Multisport" class="activity-image">
+        <img src="../assets/img/activities/multisport.jpeg" alt="Multisport" class="activity-image">
       </div>
       <div class="activity-details">
         <div class="main-infos">
@@ -48,7 +48,7 @@
     </div>
     <div class="activity-card">
       <div class="card-img">
-        <img src="src/assets/img/activities/petanque.jpeg" alt="Pétanque" class="activity-image">
+        <img src="../assets/img/activities/petanque.jpeg" alt="Pétanque" class="activity-image">
       </div>
       <div class="activity-details">
         <div class="main-infos">
